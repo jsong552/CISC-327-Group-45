@@ -31,6 +31,3 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
         </div>
     )
 }
-
-
-// #f2e9ac
