@@ -1,7 +1,12 @@
 import './output.css';
+import { Routes, Route } from 'react-router-dom';
+import { Dashboard } from './pages/dashboard.tsx';
+
 function App() {
     return (
-        <div className="text-2xl">This is a test</div>
+        <Routes>
+            <Route path="/" element={<Dashboard />} />
+        </Routes>
     )
 }
 

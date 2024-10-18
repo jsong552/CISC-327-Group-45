@@ -16,7 +16,7 @@ const Sidebar = () => {
           <img src="/user_prof.svg" alt="image"/>
           <div className='pt-4'>
           <p className="text-gray-200 text-[20px] text-left ml-6">Adwait <br/></p>    
-          <p className='text-yellow-300 text-[15px] ml-6'>Administrator</p>
+          {/* <p className='text-yellow-300 text-[15px] ml-6'>Administrator</p> */}
           </div>
           
         </div>
