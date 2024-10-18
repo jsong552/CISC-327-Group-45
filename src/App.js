@@ -6,6 +6,7 @@ import { Inventory } from './pages/Inventory.tsx';
 
 
 function App() {
+
     return (
         <Routes>
             <Route path="/" element={<Layout />} >
