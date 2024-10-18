@@ -1,10 +1,14 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './components/sidebar.tsx'
+import Navbar from './components/Navbar.tsx'
 
 const Layout = () => {
     return (
-        <div className='flex'>
+
+    <div>
+        <Navbar />
+        <div className='flex mt-14'>
             <div className='w-1/5'>
                 <Sidebar />
             </div>
@@ -12,6 +16,8 @@ const Layout = () => {
                 <Outlet />
             </div>
         </div>
+    </div>    
+    
     )
 }
 

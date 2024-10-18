@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard.tsx';
 import Layout from './Layout.tsx';
 import { Inventory } from './pages/Inventory.tsx';
 
+
 function App() {
     return (
         <Routes>

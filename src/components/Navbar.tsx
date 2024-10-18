@@ -2,9 +2,9 @@ import React from 'react';
 
 const Navbar: React.FC = () => {
     return (
-        <div className="bg-[#F7FAFD] flex items-center gap-2.5">
+        <div className="bg-[#F7FAFD] flex items-center gap-2.5 fixed top-0 w-screen">
             <img src="./logoPharma.svg" alt="logo" className="h-14" />
-            
+             
             
             <div className="flex relative bg-[#E3EBF3] rounded">
                 <input 
