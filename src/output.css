@@ -545,7 +545,59 @@ video {
   display: none;
 }
 
+.absolute {
+  position: absolute;
+}
+
+.flex {
+  display: flex;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+.w-screen {
+  width: 100vw;
+}
+
+.w-\[25\%\] {
+  width: 25%;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.bg-\[\#1212200\] {
+  background-color: #1212200;
+}
+
+.bg-\[\#121220\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(18 18 32 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 224 71 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#edf1f5\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 241 245 / var(--tw-bg-opacity));
+}
+
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
