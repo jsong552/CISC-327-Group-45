@@ -4,8 +4,8 @@ import { DashboardComponentTwo } from '../components/DashboardComponentTwo.tsx'
 
 export const Dashboard = () => {
     return (
-        <>
-            <div className="bg-[#edf1f5] w-screen">
+        <div className='w-full'>
+            <div className="bg-[#edf1f5]">
                 <div className="p-12 border">
                     <p className="text-4xl font-semibold">Dashboard</p>
                     <p className="text-xl mt-2">Overview of the pharmacy information</p>
@@ -58,6 +58,6 @@ export const Dashboard = () => {
                     text2="Invoices Generated"
                 />
             </div>
-        </>
+        </div>
     )
 }
