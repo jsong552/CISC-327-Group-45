@@ -8,7 +8,7 @@ export const Dashboard = () => {
             <div className="bg-[#edf1f5]">
                 <div className="p-12 border">
                     <p className="text-4xl font-semibold">Dashboard</p>
-                    <p className="text-xl mt-2">Overview of th pharmacy information</p>
+                    <p className="text-xl mt-2">Overview of the pharmacy information</p>
                     <div className="gap-4 grid grid-cols-3 mx-6 mt-12">
                         <DashboardComponent 
                             borderColor={"#59c39c"} 
