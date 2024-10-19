@@ -3,29 +3,22 @@ import React from 'react';
 const Navbar: React.FC = () => {
     return (
     
-        <div className='flex fixed gap-3 bg-[#F7FAFD] h-16'>
+        <div className='flex fixed gap-6 bg-[#F7FAFD] h-16 w-screen'>
+            
             <div className="flex w-1/5 bg-[#FFFFFF]">
                 <div>
-                    <img src= "./healthSymbol.svg" alt="health symbol" className='items-center ml-10'/> 
+                    <img src= "./healthSymbol.svg" alt="health symbol" className='ml-10 mt-2 mb-2'/> 
                     </div>
                 <div>
-                <div className='mt-2 ml-4'>
-                    <p className='text-[30px] text-[#000000] font-bold'>Pharma 237</p>    
+                <div className='mt-5 ml-3'>
+                    <p className='text-2xl text-[#000000] font-bold'>Pharma 237</p>    
                     
                 </div>    
                     
-
-                    
             </div>            
-        </div>
-            
-            
+        </div>                        
+            <div className="bg-[#F7FAFD] flex items-center w-1/6">
 
-            
-            <div className="bg-[#F7FAFD] flex items-center w-screen">
-
-   
-                
                 <div className="flex bg-[#E3EBF3] rounded">
                     <input 
                         
