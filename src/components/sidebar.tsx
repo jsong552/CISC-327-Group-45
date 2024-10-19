@@ -12,7 +12,7 @@ export default function Sidebar() {
     <div className='border border-black w-fit'>
          <body className="bg-[#283342]">
     <div
-      className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-1/5 overflow-y-auto text-center bg-[#283342]"
+      className="sidebar fixed top-16 bottom-0 lg:left-0 p-2 w-1/5 overflow-y-auto text-center bg-[#283342]"
     >
       <div className="text-gray-100 text-xl">
         <div className="p-2.5 mt-1 flex items-center">
