@@ -31,3 +31,14 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
         </div>
     )
 }
+
+// this shit doesnt do anything except force tailwind to recognize the colours if they do not work...
+function colourShts() {
+    return (
+        <div>
+            <div className='border-[#59c39c] border-t-[#59c39c] bg-[#a6dbcb]'/>
+            <div className='border-[#fdd70b] border-t-[#fdd70b] bg-[#f2e9ac]'/>
+            <div className='border-[#36b8f5] border-t-[#36b8f5] bg-[#a7dcf5]'/>
+        </div>
+    )
+}

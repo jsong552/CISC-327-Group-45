@@ -12,7 +12,7 @@ export default function Sidebar() {
     <div className='border border-black w-fit'>
          <body className="bg-[#283342]">
     <div
-      className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-1/5 overflow-y-auto text-center bg-[#283342]"
+      className="sidebar fixed top-16 bottom-0 lg:left-0 p-2 w-1/5 overflow-y-auto text-center bg-[#283342]"
     >
       <div className="text-gray-100 text-xl">
         <div className="p-2.5 mt-1 flex items-center">
@@ -43,6 +43,7 @@ export default function Sidebar() {
       </div>
       <div
         className="p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white"
+        onClick={() => navigate("/addmedicine")}
       >
        <img src="/medicine.svg" className="h-7 w-7"alt="image"/>
 
