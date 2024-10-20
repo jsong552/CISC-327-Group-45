@@ -7,7 +7,8 @@ import { AddMedicine } from './pages/AddMedicine.tsx';
 
 function App() {
     return (
-        <Routes>
+      
+            <Routes>
             <Route path="/" element={<Layout />} >
                 <Route index element={<Dashboard />} />
                 <Route path="dashboard" element={<Dashboard />} />
@@ -15,6 +16,9 @@ function App() {
                 <Route path="addmedicine" element={<AddMedicine />} />
             </Route>
         </Routes>
+        
+        
+
     )
 }
 
