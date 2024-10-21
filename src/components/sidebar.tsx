@@ -43,6 +43,7 @@ export default function Sidebar() {
       </div>
       <div
         className="p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white"
+        onClick={() => navigate("/addmedicine")}
       >
        <img src="/medicine.svg" className="h-7 w-7"alt="image"/>
 
