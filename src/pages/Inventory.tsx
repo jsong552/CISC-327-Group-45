@@ -14,13 +14,6 @@ export const Inventory = () => {
                     <p className="text-lg">List of medicines available for sales.</p>
                 </div>
 
-                
-            
-
-
-
-
-
 
             </div>
         </div>
