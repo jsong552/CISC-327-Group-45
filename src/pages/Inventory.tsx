@@ -3,28 +3,32 @@ import {data} from './inven_list';
 
 export const Inventory = () => {
     
-    const inv = data.medicines
-    console.log(inv);
+    const inv = data.medicines;
 
-    <div>
-                    <h1>Medicine List</h1>
-                    <ul>
-                        {inv.map((medicine, index) => (
-                            <li key={index}>
-                                <h2>{medicine.med_name}</h2>
-                                <p>ID: {medicine.id ? medicine.id : 'Not available'}</p>
-                                <p>Quantity: {medicine.qty ? medicine.qty : 'Not available'}</p>
-                            </li>
-                        ))}
-                    </ul>
-    </div>
 
+    const medicinesData = inv.map((medicine, index) => {
+        return (
+            
+            <div className="flex flex-row ml-12 border border-gray-400 rounded round-xl w-5/6 justify-between">
+                        <p className='w-1/4 text-center p-4'>{medicine.med_name}</p>
+                        <p className='w-1/4 text-center p-4'>{medicine.id}</p>
+                        <p className='w-1/4 text-center p-4'>{medicine.qty}</p>
+                        <button type="button" className="text-center w-1/4 bg-[#F0483E] text-white"><p className=''>Remove Item</p></button>
+
+
+                    </div>
+    
+        )
+
+    })
 
 
 
 
     return (
+        
         <div className='w-full'>
+            
             <div className='bg-white'>
 
                 <div className="flex">
@@ -74,27 +78,22 @@ export const Inventory = () => {
 
                     <div className="flex flex-row ml-12 mt-6 border border-gray-400 rounded round-xl w-5/6 justify-between">
                         <div className='border border-gray round-md p-4 w-1/4'>
-                            <p className="text-center">Medicine Name</p>
+                            <p className="text-center font-bold">Medicine Name</p>
                         </div>
                         <div className='border border-gray round-md p-4 w-1/4'>
-                            <p className="text-center">Medicine ID</p>
+                            <p className="text-center font-bold">Medicine ID</p>
                         </div>
                         <div className='border border-gray round-md p-4 w-1/4'>
-                            <p className="text-center">Stock in Qty</p>
+                            <p className="text-center font-bold">Stock in Qty</p>
                         </div>
                         <div className='border border-gray round-md p-4 w-1/4'>
-                            <p className="text-center">Action</p>
+                            <p className="text-center font-bold">Action</p>
                         </div>
                     </div>
 
-                    <div className="flex flex-row ml-12 border border-gray-400 rounded round-xl w-5/6 justify-between">
-                        <p className="text-center w-1/4">1</p>
-                        <p className="text-center w-1/4">2</p>
-                        <p className="text-center w-1/4">3</p>
-                        <button type="button" className="text-center w-1/4 bg-[#F0483E] text-white"><p className=''>Remove Item</p></button>
+                    {medicinesData}
 
-
-                    </div>
+                    
 
 
 
