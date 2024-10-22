@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { data, addMedicineToData } from './medicineData.tsx';
 
+// Defining a medicine type so that the data we use stays consistent
 export type Medicine = {
   name: string;
   id: string;
@@ -10,6 +11,8 @@ export type Medicine = {
 }
 
 export const AddMedicine = () => {
+
+  // this state will control the fields in the form (i.e. hold their values)
   const [newMedicine, setNewMedicine] = useState<Medicine>({
     name: "",
     id: "",
@@ -18,9 +21,15 @@ export const AddMedicine = () => {
     sideEffects: "",
   });
 
+  // this state (a boolean) will decide whether or not an error message needs to be shown
   const [showError, setShowError] = useState<boolean>(false);
+
+  // this state will contain the content of the error message
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // this function handles the changes made by the user. It will be able to
+  // determine the new value of the field inputted by the user
+  // and set its corresponding attribute to the react state created above.
   function handleChange(e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
     const { name, value } = e.target;
     setNewMedicine((prevData) => ({
@@ -29,22 +38,29 @@ export const AddMedicine = () => {
     }));
   }
 
+  // this function handles the submission of the form. it will validate the information 
+  // inputted by the user, ensuring that there are no conflicts before appending
+  // the data to the medicine list. If there is an issue, it will display an
+  // error message to the user, telling them to fix the error
   function handleSubmit() {
     const numRegex = /^[0-9]*$/i;
 
-    // Simple validation logic for the new medicine
+    // Ensuring that the name of the medicine is not empty and is not more than 100 characters
     if (newMedicine.name.length === 0 || newMedicine.name.length > 100) {
       setErrorMessage(`Medicine Name cannot be ${newMedicine.name.length === 0 ? "empty" : "longer than 100 characters."}`);
       setShowError(true);
       return;
+    // Ensuring that the quantity field is not empty
     } else if (newMedicine.quantity.length === 0) {
       setErrorMessage("Quantity cannot be empty");
       setShowError(true);
       return;
+    // Ensuring that the quantity field is numeric and only contains the characters 0-9.
     } else if (!numRegex.test(newMedicine.quantity)) {
       setErrorMessage("Quantity must be numeric");
       setShowError(true);
       return;
+    // Ensuring that the medicine ID is not empty and is not more than 100 characters
     } else if (newMedicine.id.length === 0 || newMedicine.id.length > 100) {
       setErrorMessage(`Medicine ID cannot be ${newMedicine.id.length === 0 ? "empty" : "longer than 100 characters."}`);
       setShowError(true);
@@ -157,6 +173,7 @@ export const AddMedicine = () => {
           </div>
         </form>
 
+        {/* Add Medicine button starts here */}
         <div className='mb-32'>
           <button
             className='bg-[#f0483e] py-4 px-6 ml-12 rounded-lg hover:bg-[#ed6059]'
