@@ -1,3 +1,8 @@
+
+/**
+ * Represents the Navbar component.
+ * This component displays a navigation bar with a logo, search input, and other elements.
+ */
 import React from 'react';
 
 const Navbar: React.FC = () => {
