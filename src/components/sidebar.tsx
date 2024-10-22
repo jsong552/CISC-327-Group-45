@@ -1,3 +1,10 @@
+
+/**
+ * Represents the Sidebar component.
+ * This component displays a sidebar with shorcut to the different pages in our environment.
+ */
+
+
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 

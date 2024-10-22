@@ -1,3 +1,7 @@
+/**
+ * Represents the Inventory component.
+ * This component displays a list of medicines in the inventory.
+ */
 import React from 'react';
 import { data } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
 

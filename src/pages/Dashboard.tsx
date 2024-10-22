@@ -1,3 +1,10 @@
+
+
+/**
+ * Represents the Dashboard component.
+ * This component displays the main dashboard of the application.
+ */
+
 import React from 'react'
 import { DashboardComponent } from '../components/DashboardComponent.tsx'
 import { DashboardComponentTwo } from '../components/DashboardComponentTwo.tsx'
