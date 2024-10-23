@@ -6,13 +6,16 @@
 
 
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Sidebar() {
     var currDate = new Date().toLocaleDateString();
     var currTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
     const navigate = useNavigate();
+
+    const location = useLocation();
+    const pathname = location.pathname;
     
 
   return (
@@ -33,7 +36,7 @@ export default function Sidebar() {
         <div className="my-2 bg-white h-[1px]"></div>
       </div>
       <div
-        className="p-5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-[#37939A] hover:bg-blue-500 text-white"
+        className={`p-5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/dashboard" ? "bg-[#37939a]" : ""} hover:bg-blue-500 text-white`}
         onClick={() => navigate("/dashboard")}
       >
        <img src="/vector.svg" className="h-7 w-7"alt="image"/>
@@ -41,7 +44,7 @@ export default function Sidebar() {
         <span className="text-[20px] ml-4 text-gray-200 font-semibold">Dashboard</span>
       </div>
       <div
-        className="p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white"
+        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/inventory" ? "bg-[#37939a]" : ""} text-white`}
         onClick={() => navigate("/inventory")}
       >
        <img src="/inventory.svg" className="h-7 w-7"alt="image"/>
@@ -49,7 +52,7 @@ export default function Sidebar() {
         <span className="text-[20px] ml-4 text-gray-200 font-semibold">Inventory</span>
       </div>
       <div
-        className="p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white"
+        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/addmedicine" ? "bg-[#37939a]" : ""} text-white`}
         onClick={() => navigate("/addmedicine")}
       >
        <img src="/medicine.svg" className="h-7 w-7"alt="image"/>

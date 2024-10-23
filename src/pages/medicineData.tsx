@@ -1,5 +1,7 @@
+import { Medicine } from "./AddMedicine";
+
 // medicineData.ts
-export let data = [
+export let data: Medicine[] = [
     {
       name: "Augmentin 625 Duo Tablet",
       id: "D06ID232435454",
@@ -26,5 +28,10 @@ export let data = [
   // Function to add a new medicine to the data array
   export function addMedicineToData(newMedicine: any) {
     data.push(newMedicine);
+  }
+
+  
+  export function removeByIndex(index: number) {
+    data.splice(index, 1);
   }
   
