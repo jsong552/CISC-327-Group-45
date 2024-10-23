@@ -2,8 +2,10 @@
  * Represents the Inventory component.
  * This component displays a list of medicines in the inventory.
  */
-import React from 'react';
-import { data } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
+import React, { useState, useEffect } from 'react';
+import { data, removeByIndex } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
+import { Medicine } from './AddMedicine.tsx';
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Represents the Inventory component.
@@ -12,7 +14,9 @@ import { data } from './medicineData.tsx';  // Importing the same `data` from me
 
 export const Inventory = () => {
 
-    const inv = data;
+    const [inv, setInv] = useState<Medicine[]>(data);
+    
+    const navigate = useNavigate();
 
     const medicinesData = inv.map((medicine, index) => {
         return (
@@ -27,6 +31,10 @@ export const Inventory = () => {
                     type="button"
                     className="text-center w-1/4 bg-[#F0483E] text-white"
                     data-testid={`remove-button-${index}`}
+                    onClick={() => {
+                        removeByIndex(index);
+                        setInv([...data]);
+                    }}
                 >
                     <p>Remove Item</p>
                 </button>
@@ -43,16 +51,7 @@ export const Inventory = () => {
                         <img src="./arrow.svg" alt="arrow" className="mt-5 size-3" />
                         <p className="text-3xl font-semibold text-stone-700 mt-1.5">List of Medicines</p>
 
-                        <button
-                            type="button"
-                            className='ml-80 mt-20 h-12 w-46 bg-[#F0483E] rounded-md'
-                            data-testid="add-new-item-button"  // Test id for the Add New Item button
-                        >
-                            <div className="flex gap-2 mt-1 p-2">
-                                <img src='./plusIcon.svg' alt="plus icon" />
-                                <p className="text-white ">Add New Item</p>
-                            </div>
-                        </button>
+                        
                     </div>
                 </div>
 
@@ -60,12 +59,12 @@ export const Inventory = () => {
                     <p className="text-lg">List of medicines available for sales.</p>
                 </div>
 
-                <div className="bg-[#F7FAFD] flex items-center w-1/6 mt-12 ml-12">
+                <div className="flex flex-row w-5/6 items-center mt-12 ml-12 justify-between">
                     <div className="flex bg-[#E3EBF3] rounded">
                         <input
                             type='text'
                             placeholder='Search Medicine Inventory...'
-                            className="text-[12px] px-2 py-5 focus:outline-none bg-[#e3ebf3] text-black h-2 w-full"
+                            className="text-[12px] px-2 py-5 focus:outline-none bg-[#e3ebf3] text-black h-2 w-80"
                             data-testid="search-input"  // Test id for the search input
                         />
                         <img
@@ -75,6 +74,17 @@ export const Inventory = () => {
                             data-testid="search-icon"  // Test id for the search icon
                         />
                     </div>
+                    <button
+                        type="button"
+                        className='w-46 bg-[#19557f] rounded-md'
+                        data-testid="add-new-item-button"  // Test id for the Add New Item button
+                        onClick={() => navigate("/addmedicine")}
+                    >
+                        <div className="flex gap-2 mt-1 p-2">
+                            <img src='./plusIcon.svg' alt="plus icon" />
+                            <p className="text-white">Add New Item</p>
+                        </div>
+                    </button>
                 </div>
 
                 <div className="flex flex-col">
