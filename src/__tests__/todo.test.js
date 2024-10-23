@@ -50,10 +50,10 @@ test('successfully adds a medicine and it appears in inventory', async () => {
   
   // Check if the new medicine is present in the list
   const newMedicine = await screen.findAllByText(/Paracetamol 500mg/i);
-  expect(newMedicine[1]).toBeInTheDocument();
+  expect(newMedicine[0]).toBeInTheDocument();
 
   const medicineQuantity = await screen.findAllByText(/100/i);
-  expect(medicineQuantity[1]).toBeInTheDocument();
+  expect(medicineQuantity[0]).toBeInTheDocument();
 });
 
 // Test for failure case: Adding a medicine with missing data (e.g., missing name) and checking for error message
