@@ -30,3 +30,4 @@ This should produce an output like this:
 ### Our Test Cases Were:
 1. If it successfully adds a medicine and it appears in inventory.
 2. If it fails to add medicine with a missing name and shows an error.
+3. If it successfully removes an item from the inventory.
