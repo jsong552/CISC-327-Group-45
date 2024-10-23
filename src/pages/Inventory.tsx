@@ -2,12 +2,16 @@
  * Represents the Inventory component.
  * This component displays a list of medicines in the inventory.
  */
-import React from 'react';
-import { data } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
+import React, { useState, useEffect } from 'react';
+import { data, removeByIndex } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
+import { Medicine } from './AddMedicine.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export const Inventory = () => {
 
-    const inv = data;
+    const [inv, setInv] = useState<Medicine[]>(data);
+    
+    const navigate = useNavigate();
 
     const medicinesData = inv.map((medicine, index) => {
         return (
@@ -22,6 +26,10 @@ export const Inventory = () => {
                     type="button"
                     className="text-center w-1/4 bg-[#F0483E] text-white"
                     data-testid={`remove-button-${index}`}
+                    onClick={() => {
+                        removeByIndex(index);
+                        setInv([...data]);
+                    }}
                 >
                     <p>Remove Item</p>
                 </button>
@@ -42,10 +50,11 @@ export const Inventory = () => {
                             type="button"
                             className='ml-80 mt-20 h-12 w-46 bg-[#F0483E] rounded-md'
                             data-testid="add-new-item-button"  // Test id for the Add New Item button
+                            onClick={() => navigate("/addmedicine")}
                         >
                             <div className="flex gap-2 mt-1 p-2">
                                 <img src='./plusIcon.svg' alt="plus icon" />
-                                <p className="text-white ">Add New Item</p>
+                                <p className="text-white">Add New Item</p>
                             </div>
                         </button>
                     </div>
