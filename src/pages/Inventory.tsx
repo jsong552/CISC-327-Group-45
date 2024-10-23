@@ -71,7 +71,7 @@ export const Inventory = () => {
                     </div>
                     <button
                         type="button"
-                        className='w-46 bg-[#F0483E] rounded-md'
+                        className='w-46 bg-[#19557f] rounded-md'
                         data-testid="add-new-item-button"  // Test id for the Add New Item button
                         onClick={() => navigate("/addmedicine")}
                     >
