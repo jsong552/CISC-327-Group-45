@@ -806,6 +806,10 @@ video {
   width: 100vw;
 }
 
+.w-40 {
+  width: 10rem;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -1017,6 +1021,11 @@ video {
 .bg-\[\#37939a\] {
   --tw-bg-opacity: 1;
   background-color: rgb(55 147 154 / var(--tw-bg-opacity));
+}
+
+.bg-\[\#19557f\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(25 85 127 / var(--tw-bg-opacity));
 }
 
 .p-12 {
