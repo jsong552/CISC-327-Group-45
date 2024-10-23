@@ -99,8 +99,10 @@ export const AddMedicine = () => {
           <p className="text-lg">*All fields are mandatory, except mentioned as (optional).</p>
         </div>
 
-        {/* Display the list of medicines */}
-        <div className="p-12">
+        {/* Display the list of medicines       
+        */}
+        
+        {/* <div className="p-12">
           <h3 className="text-2xl mb-4">Medicine Inventory</h3>
           <ul>
             {data.map((medicine) => (
@@ -110,7 +112,7 @@ export const AddMedicine = () => {
               </li>
             ))}
           </ul>
-        </div>
+        </div> */}
 
         {/* Form starts here */}
         <form className='p-12'>

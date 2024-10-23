@@ -24,7 +24,7 @@ export const Dashboard = () => {
                             subtitle="To Inventory"
                             desc="Add Medicines"
                             color="#a6dbcb"
-                            link=""
+                            link="/addmedicine"
                         />
                         <DashboardComponent 
                             borderColor={"#fdd70b"} 
@@ -42,7 +42,7 @@ export const Dashboard = () => {
                             subtitle="Medicines Available"
                             desc="View Inventory"
                             color="#a7dcf5"
-                            link=""
+                            link="/inventory"
                         />
                     </div>
                 </div>
