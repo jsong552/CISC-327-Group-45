@@ -1,26 +1,30 @@
 import React from 'react';
 import { data } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
 
+/**
+ * Represents the Inventory component.
+ * This component displays a list of medicines in the inventory.
+ */
+
 export const Inventory = () => {
 
     const inv = data;
 
 
+    /**
+     * Represents the rendered list of medicines in the inventory.
+     * @type {JSX.Element[]}
+     */
     const medicinesData = inv.map((medicine, index) => {
         return (
-
             <div className="flex flex-row ml-12 border border-gray-400 rounded round-xl w-5/6 justify-between">
                 <p className='w-1/4 text-center p-4'>{medicine.name}</p>
                 <p className='w-1/4 text-center p-4'>{medicine.id}</p>
                 <p className='w-1/4 text-center p-4'>{medicine.quantity}</p>
                 <button type="button" className="text-center w-1/4 bg-[#F0483E] text-white"><p className=''>Remove Item</p></button>
-
-
             </div>
-
-        )
-
-    })
+        );
+    });
 
 
 
@@ -36,8 +40,8 @@ export const Inventory = () => {
                         <img src="./arrow.svg" alt="arrow" className="mt-5 size-3" />
                         <p className="text-3xl font-semibold text-stone-700 mt-1.5">List of Medicines</p>
 
-                        <button type="button" className='ml-80 mt-20 h-12 w-46 bg-[#F0483E] rounded-md'>
-                            <div className="flex gap-2 mt-1 p-2">
+                        <button type="button" className='mt-20 h-12 w-46 bg-[#F0483E] rounded-md'>
+                            <div className="flex gap-2 mt-0.5 p-2">
                                 <img src='./plusIcon.svg' alt="plus icon" />
                                 <p className="text-white ">Add New Item</p>
 
@@ -60,7 +64,7 @@ export const Inventory = () => {
 
                             type='text'
                             placeholder='Search Medicine Inventory...'
-                            className="text-[12px] px-2 py-5 focus:outline-none bg-[#e3ebf3] text-black h-2 w-full"
+                            className="text-[12px] px-2 py-5 focus:outline-none bg-[#e3ebf3] text-black h-2 w-80"
                         />
 
                         <img
