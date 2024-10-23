@@ -1,10 +1,19 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const DashboardComponent = ({ image, borderColor, color, title, subtitle, desc, link }) => {
-    const outerDivClassName = `h-64 border-2 border-[${borderColor}] flex flex-col items-center justify-between`;
-    
+    const navigate = useNavigate();  // Initialize navigate
+
+    const handleNavigation = () => {
+        if (link) {
+            navigate(link);  // Navigate to the link provided
+        }
+    };
+
+    const outerDivClassName = `h-64 border-2 border-[${borderColor}] flex flex-col items-center justify-between cursor-pointer`;
+
     return (
-        <div className={outerDivClassName}>
+        <div className={outerDivClassName} onClick={handleNavigation}>
             <div className="flex flex-col items-center justify-around h-40 pt-8">
                 <img 
                     src={image}
@@ -29,16 +38,5 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
                 </div>
             </div>
         </div>
-    )
-}
-
-// this shit doesnt do anything except force tailwind to recognize the colours if they do not work...
-function colourShts() {
-    return (
-        <div>
-            <div className='border-[#59c39c] border-t-[#59c39c] bg-[#a6dbcb]'/>
-            <div className='border-[#fdd70b] border-t-[#fdd70b] bg-[#f2e9ac]'/>
-            <div className='border-[#36b8f5] border-t-[#36b8f5] bg-[#a7dcf5]'/>
-        </div>
-    )
-}
+    );
+};
