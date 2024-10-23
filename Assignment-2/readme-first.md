@@ -26,7 +26,7 @@ To execute the test scripts, which are written with react-testing-library and Je
 npm run test
 ```
 This should produce an output like this: 
-![](https://github.com/jsong552/CISC-327-Group-45/blob/b876723d605c7cebfc4a14bb1922b1bdcdc3b17b/Screenshot%202024-10-22%20184132.png)
+![](https://github.com/jsong552/CISC-327-Group-45/blob/1acf0a4fdad0623c1bb32424be60f4c3becf8ddb/Screenshot%202024-10-22%20221003.png)
 ### Our Test Cases Were:
 1. If it successfully adds a medicine and it appears in inventory.
 2. If it fails to add medicine with a missing name and shows an error.
