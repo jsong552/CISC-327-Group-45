@@ -16,7 +16,7 @@ export const Inventory = () => {
 
     const [inv, setInv] = useState<Medicine[]>(data);
     
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const medicinesData = inv.map((medicine, index) => {
         return (
@@ -78,7 +78,7 @@ export const Inventory = () => {
                         type="button"
                         className='w-46 bg-[#19557f] rounded-md'
                         data-testid="add-new-item-button"  // Test id for the Add New Item button
-                        onClick={() => navigate("/addmedicine")}
+                        // onClick={() => navigate("/addmedicine")}
                     >
                         <div className="flex gap-2 mt-1 p-2">
                             <img src='./plusIcon.svg' alt="plus icon" />
