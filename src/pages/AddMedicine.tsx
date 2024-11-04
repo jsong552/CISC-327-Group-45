@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { data, addMedicineToData } from './medicineData.tsx';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import  db  from '../firebase';
 
 // Defining a medicine type so that the data we use stays consistent
 export type Medicine = {
@@ -11,6 +13,29 @@ export type Medicine = {
 }
 
 export const AddMedicine = () => {
+
+  const [medicine, setMedicine] = useState<Medicine[]>([]);
+
+  useEffect(() => {
+    const docRef = doc(db, "PharmaData", "medicine");
+
+    getDoc(docRef)
+      .then((docSnap) =>{
+        if(docSnap.exists()){
+          const data: Medicine[] = docSnap.data().medicines;
+          setMedicine(data);
+        } else {
+          console.log("No such document")
+        }
+
+
+      }).catch((error) => {
+        console.log("Error getting document:", error);
+      })
+
+
+      
+    }, []);
 
   // this state will control the fields in the form (i.e. hold their values)
   const [newMedicine, setNewMedicine] = useState<Medicine>({
@@ -72,7 +97,19 @@ export const AddMedicine = () => {
     setErrorMessage("");
 
     // Append the new medicine to the hardcoded data in the external file
-    addMedicineToData(newMedicine);
+    // addMedicineToData(newMedicine);
+
+    // Append the new medicine to the database
+    setMedicine((prev) => {
+      const newMedicineArray = [...prev];
+      newMedicineArray.push(newMedicine);
+      updateDb(newMedicineArray);
+
+      return newMedicineArray;
+    });
+
+    
+
 
     // Reset the form fields
     setNewMedicine({
@@ -81,9 +118,17 @@ export const AddMedicine = () => {
       quantity: "",
       usage: "",
       sideEffects: "",
+    }); 
+  }
+
+  async function updateDb(data: Medicine[]) {
+    const docRef = doc(db, "PharmaData", "medicine");
+    await updateDoc(docRef, {
+      medicines: data
     });
   }
 
+  
   return (
     <div className='w-full'>
       <div className='bg-white'>

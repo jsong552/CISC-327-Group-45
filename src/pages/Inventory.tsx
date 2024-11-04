@@ -6,10 +6,46 @@ import React, { useState, useEffect } from 'react';
 import { data, removeByIndex } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
 import { Medicine } from './AddMedicine.tsx';
 import { useNavigate } from 'react-router-dom';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import db from '../firebase.js';
+
+
+/**
+ * Represents the Inventory component.
+ * This component displays a list of medicines in the inventory.
+ */
+
+
+
+
 
 export const Inventory = () => {
 
-    const [inv, setInv] = useState<Medicine[]>(data);
+    const [inv, setInv] = useState<Medicine[]>([]);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const docRef = doc(db, "PharmaData", "medicine");
+    
+        getDoc(docRef)
+          .then((docSnap) =>{
+            if(docSnap.exists()){
+              const data: Medicine[] = docSnap.data().medicines;
+              setInv(data);
+            } else {
+              console.log("No such document")
+            }
+    
+    
+          }).catch((error) => {
+            console.log("Error getting document:", error);
+          })
+    
+    
+          
+        }, []);
+    
     
     // const navigate = useNavigate();
 
@@ -27,8 +63,15 @@ export const Inventory = () => {
                     className="text-center w-1/4 bg-[#F0483E] text-white"
                     data-testid={`remove-button-${index}`}
                     onClick={() => {
-                        removeByIndex(index);
-                        setInv([...data]);
+                        //removeByIndex(index);
+                        setInv((prev) => { 
+                            const newMedicineArray = [...prev];
+                            newMedicineArray.splice(index, 1);
+                            updateDb(newMedicineArray);
+
+                            return newMedicineArray
+
+                        });
                     }}
                 >
                     <p>Remove Item</p>
@@ -36,6 +79,16 @@ export const Inventory = () => {
             </div>
         );
     });
+
+
+    async function updateDb(data: Medicine[]) {
+        const docRef = doc(db, "PharmaData", "medicine");
+        await updateDoc(docRef, {
+          medicines: data
+        });
+      }
+
+
 
     return (
         <div className='w-full'>
@@ -73,7 +126,7 @@ export const Inventory = () => {
                         type="button"
                         className='w-46 bg-[#19557f] rounded-md'
                         data-testid="add-new-item-button"  // Test id for the Add New Item button
-                        // onClick={() => navigate("/addmedicine")}
+                        onClick={() => navigate("/addmedicine")}
                     >
                         <div className="flex gap-2 mt-1 p-2">
                             <img src='./plusIcon.svg' alt="plus icon" />
