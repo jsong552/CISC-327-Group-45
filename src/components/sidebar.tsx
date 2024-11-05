@@ -8,6 +8,7 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 
+
 export default function Sidebar() {
     var currDate = new Date().toLocaleDateString();
     var currTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -44,7 +45,7 @@ export default function Sidebar() {
         <span className="text-[20px] ml-4 text-gray-200 font-semibold">Dashboard</span>
       </div>
       <div
-        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/inventory" ? "bg-[#37939a]" : ""} text-white`}
+        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/inventory" ? "bg-[#37939a]" : ""} hover:bg-blue-500 text-white`}
         onClick={() => navigate("/inventory")}
       >
        <img src="/inventory.svg" className="h-7 w-7"alt="image"/>
@@ -52,7 +53,7 @@ export default function Sidebar() {
         <span className="text-[20px] ml-4 text-gray-200 font-semibold">Inventory</span>
       </div>
       <div
-        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/addmedicine" ? "bg-[#37939a]" : ""} text-white`}
+        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/addmedicine" ? "bg-[#37939a]" : ""} hover:bg-blue-500 text-white`}
         onClick={() => navigate("/addmedicine")}
       >
        <img src="/medicine.svg" className="h-7 w-7"alt="image"/>
