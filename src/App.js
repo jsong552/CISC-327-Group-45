@@ -5,6 +5,7 @@ import Layout from './Layout.tsx';
 import { Inventory } from './pages/Inventory.tsx';
 import { AddMedicine } from './pages/AddMedicine.tsx';
 import { Sales } from './pages/Sales.tsx';
+import Order from './pages/Order.tsx';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                 <Route path="inventory" element={<Inventory />} />
                 <Route path="addmedicine" element={<AddMedicine />} />
                 <Route path="sales" element={<Sales />} />
+                <Route path="order" element={<Order />} />
             </Route>
         </Routes>
         
