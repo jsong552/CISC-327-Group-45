@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
                     </div>    
                 </div>            
             </div>                        
-            <div className="bg-[#F7FAFD] flex items-center w-1/6">
+            {/* <div className="bg-[#F7FAFD] flex items-center w-1/6">
                 <div className="flex bg-[#E3EBF3] rounded">
                     <input 
                         type='text' 
@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
                         className="right-0 p-3" 
                     />   
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

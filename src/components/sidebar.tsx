@@ -63,12 +63,20 @@ export default function Sidebar() {
 
 
       <div
-        className="p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white"
+        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/sales" ? "bg-[#37939a]" : ""} hover:bg-blue-500 text-white`}
         onClick={() => navigate("/sales")}
       >
        <img src="/sales.svg" className="h-8 w-8"alt="image"/>
 
         <span className="text-[20px] ml-4 text-gray-200 font-semibold">View Sales</span>
+      </div>
+      <div
+        className={`p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer ${pathname === "/order" ? "bg-[#37939a]" : ""} hover:bg-blue-500 text-white`}
+        onClick={() => navigate("/order")}
+      >
+       <img src="/plusIcon.svg" className="h-8 w-8"alt="image"/>
+
+        <span className="text-[20px] ml-4 text-gray-200 font-semibold">Make Order</span>
       </div>
 
       <div className="my-4 bg-white h-[1px]"></div>
