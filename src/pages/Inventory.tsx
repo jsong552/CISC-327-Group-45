@@ -23,37 +23,56 @@ export const Inventory = () => {
 
     const [inv, setInv] = useState<Medicine[]>([]);
 
+    // this state holds the inventory, does not change after initialization
+    const [dataInv, setDataInv] = useState<Medicine[]>([]);
+
+    const [search, setSearch] = useState<string>("");
+
     const navigate = useNavigate();
 
     useEffect(() => {
         const docRef = doc(db, "PharmaData", "medicine");
     
         getDoc(docRef)
-          .then((docSnap) =>{
+            .then((docSnap) =>{
             if(docSnap.exists()){
-              const data: Medicine[] = docSnap.data().medicines;
-              setInv(data);
+                const data: Medicine[] = docSnap.data().medicines;
+                setInv(data);
+                setDataInv(data);
             } else {
-              console.log("No such document")
+                console.log("No such document")
             }
-    
-    
-          }).catch((error) => {
-            console.log("Error getting document:", error);
-          })
-    
-    
-          
-        }, []);
-    
-    
-    // const navigate = useNavigate();
+
+
+            }).catch((error) => {
+                console.log("Error getting document:", error);
+            }
+        );
+    }, []);
+
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const { value } = e.target;
+        setSearch(value);
+    }
+
+    function handleSearch() {
+        setInv(() => {
+            const newInv: Medicine[] = [];
+            for (let i = 0; i < dataInv.length; i++) {
+                if (dataInv[i].name.toUpperCase().includes(search.toUpperCase()) || dataInv[i].quantity.toUpperCase().includes(search.toUpperCase()) || dataInv[i].usage?.toUpperCase()?.includes(search.toUpperCase()) || dataInv[i].sideEffects?.toUpperCase()?.includes(search.toUpperCase())) {
+                    newInv.push(dataInv[i]);
+                }
+            }
+
+            return newInv;
+        });
+    }
 
     const medicinesData = inv.map((medicine, index) => {
         return (
             <div
                 className="flex flex-row ml-12 border border-gray-400 rounded round-xl w-5/6 justify-between"
-                data-testid={`medicine-item-${index}`}  // Adding test id to each medicine item
+                data-testid={`medicine-item-${index}`} 
             >
                 <p className='w-1/4 text-center p-4' data-testid={`medicine-name-${index}`}>{medicine.name}</p>
                 <p className='w-1/4 text-center p-4' data-testid={`medicine-id-${index}`}>{medicine.id}</p>
@@ -63,14 +82,12 @@ export const Inventory = () => {
                     className="text-center w-1/4 bg-[#F0483E] text-white"
                     data-testid={`remove-button-${index}`}
                     onClick={() => {
-                        //removeByIndex(index);
                         setInv((prev) => { 
                             const newMedicineArray = [...prev];
                             newMedicineArray.splice(index, 1);
                             updateDb(newMedicineArray);
 
                             return newMedicineArray
-
                         });
                     }}
                 >
@@ -80,15 +97,12 @@ export const Inventory = () => {
         );
     });
 
-
     async function updateDb(data: Medicine[]) {
         const docRef = doc(db, "PharmaData", "medicine");
         await updateDoc(docRef, {
           medicines: data
         });
-      }
-
-
+    }
 
     return (
         <div className='w-full'>
@@ -112,14 +126,19 @@ export const Inventory = () => {
                         <input
                             type='text'
                             placeholder='Search Medicine Inventory...'
-                            className="text-[12px] px-2 py-5 focus:outline-none bg-[#e3ebf3] text-black h-2 w-80"
+                            className="text-lg px-2 py-5 focus:outline-none bg-[#e3ebf3] text-black h-2 w-80"
                             data-testid="search-input"  // Test id for the search input
+                            value={search}
+                            onChange={(e) => handleChange(e)}
                         />
                         <img
                             src="./searchicon.svg"
                             alt="search icon"
-                            className="right-0 p-3"
-                            data-testid="search-icon"  // Test id for the search icon
+                            className="right-0 p-3 hover:cursor-pointer"
+                            data-testid="search-icon" 
+                            onClick={() => {
+                                handleSearch();
+                            }}
                         />
                     </div>
                     <button
