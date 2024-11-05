@@ -1,38 +1,21 @@
-/**
- * Represents the Inventory component.
- * This component displays a list of medicines in the inventory.
- */
 import React, { useState, useEffect } from 'react';
-import { data, removeByIndex } from './medicineData.tsx';  // Importing the same `data` from medicineData.ts
 import { Medicine } from './AddMedicine.tsx';
 import { useNavigate } from 'react-router-dom';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import db from '../firebase.js';
 
-
-/**
- * Represents the Inventory component.
- * This component displays a list of medicines in the inventory.
- */
-
-
-
-
-
 export const Inventory = () => {
-
     const [inv, setInv] = useState<Medicine[]>([]);
 
     // this state holds the inventory, does not change after initialization
     const [dataInv, setDataInv] = useState<Medicine[]>([]);
 
     const [search, setSearch] = useState<string>("");
-
+    const [editIndex, setEditIndex] = useState<number | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         const docRef = doc(db, "PharmaData", "medicine");
-    
         getDoc(docRef)
             .then((docSnap) =>{
             if(docSnap.exists()){
@@ -66,43 +49,104 @@ export const Inventory = () => {
 
             return newInv;
         });
+
     }
+    const handleEditToggle = (index: number) => {
+        setEditIndex(index === editIndex ? null : index);
+    };
 
-    const medicinesData = inv.map((medicine, index) => {
-        return (
-            <div
-                className="flex flex-row ml-12 border border-gray-400 rounded round-xl w-5/6 justify-between"
-                data-testid={`medicine-item-${index}`} 
-            >
-                <p className='w-1/4 text-center p-4' data-testid={`medicine-name-${index}`}>{medicine.name}</p>
-                <p className='w-1/4 text-center p-4' data-testid={`medicine-id-${index}`}>{medicine.id}</p>
-                <p className='w-1/4 text-center p-4' data-testid={`medicine-quantity-${index}`}>{medicine.quantity}</p>
-                <button
-                    type="button"
-                    className="text-center w-1/4 bg-[#F0483E] text-white"
-                    data-testid={`remove-button-${index}`}
-                    onClick={() => {
-                        setInv((prev) => { 
-                            const newMedicineArray = [...prev];
-                            newMedicineArray.splice(index, 1);
-                            updateDb(newMedicineArray);
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, field: string, index: number) => {
+        const value = e.target.value;
+        setInv((prev) => {
+            const updated = [...prev];
+            updated[index] = { ...updated[index], [field]: value };
+            return updated;
+        });
+    };
 
-                            return newMedicineArray
-                        });
-                    }}
-                >
-                    <p>Remove Item</p>
-                </button>
-            </div>
-        );
-    });
+    const handleSave = async (index: number) => {
+        const updatedMedicines = [...inv];
+        setEditIndex(null);
+        await updateDb(updatedMedicines);
+    };
+
+    const handleRemove = (index: number) => {
+        setInv((prev) => {
+            const updated = [...prev];
+            updated.splice(index, 1);
+            updateDb(updated);
+            return updated;
+        });
+    };
+
+    
 
     async function updateDb(data: Medicine[]) {
         const docRef = doc(db, "PharmaData", "medicine");
         await updateDoc(docRef, {
-          medicines: data
+            medicines: data,
         });
     }
+
+    const medicinesData = inv.map((medicine, index) => (
+        <div
+            key={index}
+            className="flex flex-row ml-12 border border-gray-400 rounded round-xl w-5/6 justify-between items-center"
+            data-testid={`medicine-item-${index}`}
+        >
+            {editIndex === index ? (
+                <>
+                    <input
+                        type="text"
+                        value={medicine.name}
+                        className="w-1/4 text-center p-4"
+                        onChange={(e) => handleInputChange(e, 'name', index)}
+                    />
+                    <input
+                        type="text"
+                        value={medicine.id}
+                        className="w-1/4 text-center p-4"
+                        onChange={(e) => handleInputChange(e, 'id', index)}
+                    />
+                    <input
+                        type="number"
+                        value={medicine.quantity}
+                        className="w-1/4 text-center p-4"
+                        onChange={(e) => handleInputChange(e, 'quantity', index)}
+                    />
+                    <button
+                        type="button"
+                        className="text-center w-1/6 bg-green-500 text-white p-2 mx-1 rounded"
+                        onClick={() => handleSave(index)}
+                    >
+                        Save
+                    </button>
+                </>
+            ) : (
+                <>
+                    <p className="w-1/4 text-center p-4">{medicine.name}</p>
+                    <p className="w-1/4 text-center p-4">{medicine.id}</p>
+                    <p className="w-1/4 text-center p-4">{medicine.quantity}</p>
+                    <div className="flex w-1/4 justify-around">
+                        <button
+                            type="button"
+                            className="text-center bg-blue-500 text-black p-2 rounded w-1/2 mx-1"
+                            onClick={() => handleEditToggle(index)}
+                        >
+                            Edit
+                        </button>
+                        <button
+                            type="button"
+                            className="text-center bg-red-500 text-black p-2 rounded w-1/2 mx-1"
+                            onClick={() => handleRemove(index)}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                </>
+            )}
+        </div>
+    ));
 
     return (
         <div className='w-full'>
@@ -112,8 +156,6 @@ export const Inventory = () => {
                         <p className="text-4xl font-semibold text-stone-700">Inventory</p>
                         <img src="./arrow.svg" alt="arrow" className="mt-5 size-3" />
                         <p className="text-3xl font-semibold text-stone-700 mt-1.5">List of Medicines</p>
-
-                        
                     </div>
                 </div>
 
@@ -144,7 +186,7 @@ export const Inventory = () => {
                     <button
                         type="button"
                         className='w-46 bg-[#19557f] rounded-md'
-                        data-testid="add-new-item-button"  // Test id for the Add New Item button
+                        data-testid="add-new-item-button"
                         onClick={() => navigate("/addmedicine")}
                     >
                         <div className="flex gap-2 mt-1 p-2">
@@ -176,4 +218,4 @@ export const Inventory = () => {
             </div>
         </div>
     );
-}
+};
