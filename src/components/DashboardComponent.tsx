@@ -2,11 +2,11 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const DashboardComponent = ({ image, borderColor, color, title, subtitle, desc, link }) => {
-    const navigate = useNavigate();  // Initialize navigate
+    const navigate = useNavigate();  
 
     const handleNavigation = () => {
         if (link) {
-            navigate(link);  // Navigate to the link provided
+            navigate(link);  
         }
     };
 
@@ -40,3 +40,13 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
         </div>
     );
 };
+
+function colourFix() {
+    return (
+        <>
+            <div className='bg-[#a6dbcb] border-t-[#59c39c] border-[#59c39c]' />
+            <div className='bg-[#f2e9ac] border-t-[#fdd70b] border-[#fdd70b]' />
+            <div className='bg-[#a7dcf5] border-t-[#36b8f5] border-[#36b8f5]' />
+        </>
+    )
+}

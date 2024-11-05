@@ -5,11 +5,36 @@
  * This component displays the main dashboard of the application.
  */
 
-import React from 'react'
+import React, { useState, useEffect} from 'react'
 import { DashboardComponent } from '../components/DashboardComponent.tsx'
 import { DashboardComponentTwo } from '../components/DashboardComponentTwo.tsx'
+import { doc, getDoc } from 'firebase/firestore';
+import db from '../firebase.js';
+import { Medicine } from './AddMedicine.tsx';
 
 export const Dashboard = () => {
+    const [medicinesAvailable, setMedicinesAvailable] = useState<number | null>(null);
+
+    useEffect(() => {
+        const docRef = doc(db, "PharmaData", "medicine");
+
+        getDoc(docRef)
+            .then((docSnap) => {
+                if (docSnap.exists()) {
+                    const data: Medicine[] = docSnap.data().medicines;
+                    setMedicinesAvailable(data.length);
+                    console.log(data.length);
+                }
+                else {
+                    console.log("No such document");
+                }
+            }).catch((error) => {
+                console.log("Error getting document: ", error);
+            }
+        )
+    }, []);
+
+
     return (
         <div className='w-full'>
             <div className="bg-[#edf1f5]">
@@ -38,7 +63,7 @@ export const Dashboard = () => {
                         <DashboardComponent 
                             borderColor={"#36b8f5"} 
                             image="/medicinesAvailableIcon.svg"
-                            title="298"
+                            title={medicinesAvailable}
                             subtitle="Medicines Available"
                             desc="View Inventory"
                             color="#a7dcf5"
