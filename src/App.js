@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard.tsx';
 import Layout from './Layout.tsx';
 import { Inventory } from './pages/Inventory.tsx';
 import { AddMedicine } from './pages/AddMedicine.tsx';
+import { Sales } from './pages/Sales.tsx';
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="inventory" element={<Inventory />} />
                 <Route path="addmedicine" element={<AddMedicine />} />
+                <Route path="sales" element={<Sales />} />
             </Route>
         </Routes>
         

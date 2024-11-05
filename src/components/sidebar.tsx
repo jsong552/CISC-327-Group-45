@@ -64,6 +64,7 @@ export default function Sidebar() {
 
       <div
         className="p-5 mt-3 mb-2 flex items-center rounded-md px-4 duration-300 cursor-pointer text-white"
+        onClick={() => navigate("/sales")}
       >
        <img src="/sales.svg" className="h-8 w-8"alt="image"/>
 
