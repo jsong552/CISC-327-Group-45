@@ -13,7 +13,8 @@ import db from '../firebase.js';
 import { Medicine } from './AddMedicine.tsx';
 
 export const Dashboard = () => {
-    const [medicinesAvailable, setMedicinesAvailable] = useState<number | null>(null);
+    const [data, setData] = useState<Medicine[]>([]);
+    const [quantity, setQuantity] = useState<number>(0);
 
     useEffect(() => {
         const docRef = doc(db, "PharmaData", "medicine");
@@ -21,9 +22,15 @@ export const Dashboard = () => {
         getDoc(docRef)
             .then((docSnap) => {
                 if (docSnap.exists()) {
-                    const data: Medicine[] = docSnap.data().medicines;
-                    setMedicinesAvailable(data.length);
-                    console.log(data.length);
+                    const medicineData: Medicine[] = docSnap.data().medicines;
+                    setData(medicineData);
+                    
+                    let tempQuantity = 0;
+                    for (let i = 0; i < medicineData.length; i++) {
+                        tempQuantity += Number(medicineData[i].quantity); 
+                    }
+                    setQuantity(tempQuantity);
+
                 }
                 else {
                     console.log("No such document");
@@ -63,7 +70,7 @@ export const Dashboard = () => {
                         <DashboardComponent 
                             borderColor={"#36b8f5"} 
                             image="/medicinesAvailableIcon.svg"
-                            title={medicinesAvailable}
+                            title={data.length}
                             subtitle="Medicines Available"
                             desc="View Inventory"
                             color="#a7dcf5"
@@ -74,8 +81,8 @@ export const Dashboard = () => {
             </div>
             <div className="px-8 grid grid-cols-2 gap-8 mt-32 mb-32">
                 <DashboardComponentTwo 
-                    no1="298"
-                    no2="24"
+                    no1={quantity}
+                    no2={data.length}
                     title="Inventory"
                     subtitle="Go to Configuration"
                     text1="Total no. of Medicines"
