@@ -11,10 +11,15 @@ import { DashboardComponentTwo } from '../components/DashboardComponentTwo.tsx'
 import { doc, getDoc } from 'firebase/firestore';
 import db from '../firebase.js';
 import { Medicine } from './AddMedicine.tsx';
+import { Order } from './Order.tsx';
+import { format } from 'date-fns';
 
 export const Dashboard = () => {
     const [data, setData] = useState<Medicine[]>([]);
     const [quantity, setQuantity] = useState<number>(0);
+
+    const [orderData, setOrderData] = useState<Order[]>([]);
+    const [totalSold, setTotalSold] = useState<number>(0);
 
     useEffect(() => {
         const docRef = doc(db, "PharmaData", "medicine");
@@ -38,9 +43,27 @@ export const Dashboard = () => {
             }).catch((error) => {
                 console.log("Error getting document: ", error);
             }
-        )
-    }, []);
+        );
 
+        const orderDocRef = doc(db, "PharmaData", "orders");
+        getDoc(orderDocRef).then((docSnap) => {
+            if (docSnap.exists()) {
+                const orderData: Order[] = docSnap.data().data;
+                setOrderData(orderData);
+
+                let tempTotal = 0;
+                for (let i = 0; i < orderData.length; i++) {
+                    tempTotal += Number(orderData[i].quantity);
+                }
+                setTotalSold(tempTotal);
+            }
+            else {
+                console.log("No such document");
+            }
+        }).catch((error) => {
+            console.log("Error getting document: ", error);
+        });
+    }, []);
 
     return (
         <div className='w-full'>
@@ -87,14 +110,16 @@ export const Dashboard = () => {
                     subtitle="Go to Configuration"
                     text1="Total no. of Medicines"
                     text2="Medicine Groups"
+                    link="/inventory"
                 />
                 <DashboardComponentTwo 
-                    no1="70,856"
-                    no2="5,288"
+                    no1={totalSold}
+                    no2={orderData.length}
                     title="Quick Report"
-                    subtitle="October 2024"
+                    subtitle={format(new Date(), 'MMMM yyyy')}
                     text1="Qty. of Medicines Sold"
                     text2="Invoices Generated"
+                    link="/sales"
                 />
             </div>
         </div>

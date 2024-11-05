@@ -3,10 +3,13 @@ import { Order } from './Order';
 import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore';
 import db from '../firebase';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 export const Sales = () => {
 
     const [orderData, setOrderData] = useState<Order[]>([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const docRef = doc(db, "PharmaData", "orders");
@@ -52,10 +55,17 @@ export const Sales = () => {
     return (
         <div className='w-full'>
                 <div className='bg-white'>
-                    <div className="flex">
-                        <div className="p-12 flex gap-4 h-6">
+                    <div className="flex flex-row items-end justify-between w-5/6 m-12">
+                        <div className="h-6">
                             <p className="text-4xl font-semibold text-stone-700">Sales</p>
                         </div>
+
+                        <button 
+                            className='bg-red-500 hover:bg-red-400 text-white rounded-xl py-3 px-6 text-xl relative top-[50px]'
+                            onClick={() => navigate("/order")}
+                        >
+                            Make Order
+                        </button>
                     </div>
 
                     <div className="ml-12">

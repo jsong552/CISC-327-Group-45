@@ -1,8 +1,14 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-export const DashboardComponentTwo = ({ no1, no2, title, subtitle, text1, text2 }) => {
+export const DashboardComponentTwo = ({ no1, no2, title, subtitle, text1, text2, link }) => {
+    const navigate = useNavigate();
+
     return (
-        <div className="border-2 border-[#d7d8da] rounded-lg h-48 flex flex-col">
+        <div 
+            className="border-2 border-[#d7d8da] rounded-lg h-48 flex flex-col"
+            onClick={() => navigate(link)}
+        >
             <div className="px-8 flex flex-row border-b-2 border-b-[#d7d8da] h-12 w-full justify-between items-center">
                 <p className="text-center font-bold text-xl">{title}</p>
                 <div className="flex flex-row gap-4 items-center">
