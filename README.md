@@ -10,6 +10,7 @@ The project works as intended, using our Firebase database.
 On a local machine, the backend Firebase Integration will not work immediately since you do not have our
 API keys and information. You will have to insert the .env file into the root layer of our project.
 
-Once that is done, you may start the development server as normal
-```npm start```
+Once that is done, ensure that all dependencies are installed on your local machine by running ```npm instal```.
+
+Next, you may start the development server by running ```npm start```.
 
