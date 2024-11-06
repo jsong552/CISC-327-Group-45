@@ -1,3 +1,18 @@
+/**
+ * The Order component allows users to create new orders for medicines in the pharmacy management system.
+ * This component is used to capture and submit new orders to the Firestore 
+ *
+ *
+ * Submits the new order to the Firestore database and updates the list of orders. 
+ * This count is also updated in the dashboard.
+ *
+ * ## How it works:
+ * 1. User inputs order details into a form.
+ * 2. The form data is validated upon submission.
+ * 3. If valid, the new order is added to the Firestore database.
+ * 4. The UI confirms by rendering the added order.
+ */
+
 import React, { useState, useEffect } from "react";
 import { doc, getDoc, Timestamp, updateDoc } from "firebase/firestore";
 import db from "../firebase";
@@ -154,6 +169,7 @@ export default function Order() {
                     <p>Medicine Name*</p>
                     <input
                     type="text"
+                    data-testid="order-name"
                     name="name"
                     autoComplete='off'
                     value={newOrder.name}
@@ -167,6 +183,7 @@ export default function Order() {
                         <input
                             type="text"
                             name="quantity"
+                            data-testid="order-quantity"
                             autoComplete='off'
                             value={newOrder.quantity}
                             onChange={(e) => handleChange(e)}
@@ -178,6 +195,7 @@ export default function Order() {
                         <input
                             type="text"
                             name="id"
+                            data-testid="order-id"
                             autoComplete='off'
                             value={newOrder.id}
                             onChange={(e) => handleChange(e)}
@@ -191,6 +209,7 @@ export default function Order() {
                         <input
                         type="text"
                         name="price"
+                        data-testid="order-price"
                         autoComplete='off'
                         value={newOrder.price}
                         onChange={(e) => handleChange(e)}
