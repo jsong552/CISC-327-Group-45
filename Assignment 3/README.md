@@ -67,5 +67,5 @@ npm test
 ```
 And then select the option for running all tests. This will run all the tests in the project.
 
-This is how the output should look like 
-![](https://github.com/jsong552/CISC-327-Group-45/blob/1acf0a4fdad0623c1bb32424be60f4c3becf8ddb/Screenshot%202024-10-22%20221003.png)
+This is how the test output should look like 
+![](https://github.com/jsong552/CISC-327-Group-45/blob/ec1a64bd5ed620b42d2a009554d784728306345d/image_a3.png)
