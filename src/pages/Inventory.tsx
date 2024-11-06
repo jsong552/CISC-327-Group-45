@@ -1,3 +1,24 @@
+/**
+ * @file This file defines the Inventory component.
+ * This component allows users to view, edit, and delete medicine details.
+ *
+ * The page fetches the current inventory from the Firestore database upon initial load.
+ * Users can search for medicines by name
+ * Each listed medicine can be edited or deleted directly from this page.
+ *
+ * ## How to navigate here:
+ * Rendered by navigating to the Inventory page from either the sidebar or the dashboard.
+ *
+ * 
+ * Updates made to the inventory on this page are pushed to the Firestore database.
+ *
+ * ## How it works:
+ * 1. Fetches initial medicine data from Firestore. 
+ * 2. Allows user to search through the inventory using name
+ * 3. User can modify medicine details which are then saved back to the database.
+ * 4. User can remove medicines from the inventory.
+ */
+
 import React, { useState, useEffect } from 'react';
 import { Medicine } from './AddMedicine.tsx';
 import { useNavigate } from 'react-router-dom';
@@ -98,24 +119,28 @@ export const Inventory = () => {
                 <>
                     <input
                         type="text"
+                        data-testid="edit-name"
                         value={medicine.name}
                         className="w-1/4 text-center p-4"
                         onChange={(e) => handleInputChange(e, 'name', index)}
                     />
                     <input
                         type="text"
+                        data-testid="edit-id"
                         value={medicine.id}
                         className="w-1/4 text-center p-4"
                         onChange={(e) => handleInputChange(e, 'id', index)}
                     />
                     <input
                         type="number"
+                        data-testid="edit-quantity"
                         value={medicine.quantity}
                         className="w-1/4 text-center p-4"
                         onChange={(e) => handleInputChange(e, 'quantity', index)}
                     />
                     <button
                         type="button"
+                        data-testid="save-edits-button"
                         className="text-center w-1/6 bg-green-500 text-white p-2 mx-1 rounded"
                         onClick={() => handleSave(index)}
                     >
@@ -132,11 +157,13 @@ export const Inventory = () => {
                             type="button"
                             className="text-center bg-blue-500 text-black p-2 rounded w-1/2 mx-1"
                             onClick={() => handleEditToggle(index)}
+                            data-testid="edit-button"
                         >
                             Edit
                         </button>
                         <button
                             type="button"
+                            data-testid="delete-button"
                             className="text-center bg-red-500 text-black p-2 rounded w-1/2 mx-1"
                             onClick={() => handleRemove(index)}
                         >
@@ -160,7 +187,7 @@ export const Inventory = () => {
                 </div>
 
                 <div className="ml-12">
-                    <p className="text-lg">List of medicines available for sales.</p>
+                    <p className="text-lg" data-testid="tweaker">List of medicines available for sales.</p>
                 </div>
 
                 <div className="flex flex-row w-5/6 items-center mt-12 ml-12 justify-between">

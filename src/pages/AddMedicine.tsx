@@ -1,3 +1,22 @@
+/**
+ *
+ * This component allows users to input details about a new medicine and add it to the Firestore database.
+ *
+ * ## How to navigate here: 
+ * Accessed via the "Add New Medicine" button on the sidebar and the dashboard.
+ *
+ * 
+ *
+ * 
+ * Upon submission, the new medicine is added to the database and can then be viewed on the Inventory page.
+ *
+ * ## How it works:
+ * 1. User fills out the form fields and submits the form.
+ * 2. Validation checks are performed to ensure all required fields are filled.
+ * 3. If the form is valid, the new medicine details are added to Firebase.
+ * 4. The user receives feedback on success or failure.
+ */
+
 import React, { useEffect, useState } from 'react';
 import { data, addMedicineToData } from './medicineData.tsx';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';

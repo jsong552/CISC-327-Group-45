@@ -1,3 +1,17 @@
+/**
+ * The Sales component displays a summary of all orders made.
+ * It fetches and lists each order's details including medicine name, quantity, and total price.
+ *
+ * ## How to navigate here:
+ * Accessed via the "Sales" button on the sidebar and Dashboard.
+ *
+ *
+ * ## How it works:
+ * 1. Fetches sales data from Firestore.
+ * 2. Renders a table displaying each sale's detailed information.
+ * 3. Provides a user interface for navigation back to order creation.
+ */
+
 import React, { useEffect, useState } from 'react';
 import { Order } from './Order';
 import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore';
