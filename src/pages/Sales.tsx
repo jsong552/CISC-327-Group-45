@@ -33,11 +33,9 @@ export const Sales = () => {
                 const data: Order[] = docSnap.data().data;
                 setOrderData(data);
             }
-            else {
-                console.log("No such document");
-            }
+            
         }).catch((error) => {
-            console.log("Error getting the document: ", error);
+           
         });
     }, []);
 

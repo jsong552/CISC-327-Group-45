@@ -39,11 +39,9 @@ export default function Order() {
             if(docSnap.exists()){
                 const data: Order[] = docSnap.data().data;
                 setOrders(data);
-            } else {
-                console.log("No such document")
-            }
+            } 
         }).catch((error) => {
-            console.log("Error getting document:", error);
+            
         })
     }, []);
 

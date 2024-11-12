@@ -43,15 +43,8 @@ export const Inventory = () => {
                 const data: Medicine[] = docSnap.data().medicines;
                 setInv(data);
                 setDataInv(data);
-            } else {
-                console.log("No such document")
             }
-
-
-            }).catch((error) => {
-                console.log("Error getting document:", error);
-            }
-        );
+        });
     }, []);
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
