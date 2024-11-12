@@ -221,6 +221,7 @@ export default function Order() {
                         <textarea
                             className='text-xl p-2 focus:outline-none resize-none bg-[#e3ebf3] border border-[#9ba2ab] rounded-lg w-full h-32'
                             name="notes"
+                            data-testid="notes-part"
                             value={newOrder.notes}
                             onChange={(e) => handleChange(e)}
                         />

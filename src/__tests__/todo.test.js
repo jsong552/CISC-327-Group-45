@@ -873,12 +873,16 @@ describe('Order Component', () => {
         fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), {
             target: { value: 69 },
         });
+        // Enter ok price
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), {
+            target: { value: 69 },
+        });
         // Enter too long medicine id
         fireEvent.change(screen.getByLabelText(/Order ID*/i), {
             target: { value: 'A'.repeat(101) },
         });
     
-        fireEvent.click(screen.getByText('Submit'));
+        fireEvent.click(screen.getByText('Submit Order'));
     
         await waitFor(() => {
             expect(screen.getByText('Order ID cannot be longer than 100 characters.')).toBeInTheDocument();
@@ -891,7 +895,8 @@ describe('Order Component', () => {
         // Fill out the form with valid data
         fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
         fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
-        fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Order ID*/i), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), { target: { value: '69' } });
     
         // Submit the form
         fireEvent.click(screen.getByText('Submit Order'));
@@ -901,37 +906,98 @@ describe('Order Component', () => {
         });
     });
 
-    it('checking for valid price', async () => {
-        render(<AddMedicine />);
+    it('price per unit must not be empty', async () => {
+        render(<Order />);
     
         // Fill out the form with valid data
         fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
         fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
-        fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'TYL123' } });
-        fireEvent.change(screen.getByTestId('how-to-use'), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Order ID*/i), { target: { value: 'TYL123' } });
     
         // Submit the form
-        fireEvent.click(screen.getByText('Add Medicine'));
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Price cannot be empty')).toBeInTheDocument();
+        });
+    });
+
+    it('price per unit must be numeric', async () => {
+        render(<Order />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByLabelText(/Order ID*/i), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Price must be numeric')).toBeInTheDocument();
+        });
+    });
+
+    it('allows for updating the notes part', async () => {
+        render(<Order />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByTestId('order-id'), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), { target: { value: '69' } });
+        fireEvent.change(screen.getByTestId('notes-part'), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Submit Order'));
     
         await waitFor(() => {
             expect(getDoc).toHaveBeenCalledTimes(1); // Check that getDoc was called to load data
         });
     });
+});
 
-    it('allows for updating the side effects part', async () => {
-        render(<AddMedicine />);
-    
-        // Fill out the form with valid data
-        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
-        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
-        fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'TYL123' } });
-        fireEvent.change(screen.getByTestId('side-effects'), { target: { value: 'TYL123' } });
-    
-        // Submit the form
-        fireEvent.click(screen.getByText('Add Medicine'));
-    
-        await waitFor(() => {
-            expect(getDoc).toHaveBeenCalledTimes(1); // Check that getDoc was called to load data
+
+
+// Testing Sales navigation
+describe('Sales', () => {
+    beforeEach(() => {
+        getDoc.mockResolvedValue({
+            exists: () => true,
+            data: () => ({
+                medicines: [
+                    { name: 'Paracetamol 500mg', quantity: '100', id: 'D06ID232435499' },
+                    { name: 'Penicillin', quantity: '10', id: 'G30IHG3I040J0T' },
+                    { name: 'Aspirin', quantity: '1', id: 'NH04J50OGFKNG' },
+                ],
+                data: [ 
+                    { createdAt: Timestamp.fromDate(new Date()), id: 'SDG34069WRGI240', name: 'Penicillin', price: "236", quantity: "87654" },
+                ],
+            }),
         });
+    });
+
+    let mockNavigate;
+  
+    // Set up before each test, if needed
+    beforeEach(() => {
+      mockNavigate = jest.fn(); // Local mock for useNavigate
+    });
+  
+    it('should navigate to addmedicine to link', () => {
+        // Mock useNavigate for this test
+        useNavigate.mockReturnValue(mockNavigate);
+    
+        render(
+            <MemoryRouter>
+                <Sales />
+            </MemoryRouter>
+        ); // Render Sidebar component
+    
+        // Test clicking on the "add medicine" link
+        const orderLink = screen.getByTestId('order-button');
+        fireEvent.click(orderLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/order');
     });
 });
