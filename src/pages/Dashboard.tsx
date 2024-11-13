@@ -37,13 +37,7 @@ export const Dashboard = () => {
                     setQuantity(tempQuantity);
 
                 }
-                else {
-                    console.log("No such document");
-                }
-            }).catch((error) => {
-                console.log("Error getting document: ", error);
-            }
-        );
+            }).catch(() => {});
 
         const orderDocRef = doc(db, "PharmaData", "orders");
         getDoc(orderDocRef).then((docSnap) => {
@@ -57,11 +51,6 @@ export const Dashboard = () => {
                 }
                 setTotalSold(tempTotal);
             }
-            else {
-                console.log("No such document");
-            }
-        }).catch((error) => {
-            console.log("Error getting document: ", error);
         });
     }, []);
 

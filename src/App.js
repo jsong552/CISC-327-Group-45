@@ -9,8 +9,7 @@ import Order from './pages/Order.tsx';
 
 function App() {
     return (
-      
-            <Routes>
+        <Routes>
             <Route path="/" element={<Layout />} >
                 <Route index element={<Dashboard />} />
                 <Route path="dashboard" element={<Dashboard />} />
@@ -20,9 +19,6 @@ function App() {
                 <Route path="order" element={<Order />} />
             </Route>
         </Routes>
-        
-        
-
     )
 }
 

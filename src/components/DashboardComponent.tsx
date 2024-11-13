@@ -13,7 +13,7 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
     const outerDivClassName = `h-64 border-2 border-[${borderColor}] flex flex-col items-center justify-between cursor-pointer`;
 
     return (
-        <div className={outerDivClassName} onClick={handleNavigation}>
+        <div className={outerDivClassName} data-testid="dashboard-component-button" onClick={handleNavigation}>
             <div className="flex flex-col items-center justify-around h-40 pt-8">
                 <img 
                     src={image}
@@ -37,16 +37,12 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
                     </div>
                 </div>
             </div>
+
+            <div data-testid="colour-fix hidden">
+                <div className='bg-[#a6dbcb] border-t-[#59c39c] border-[#59c39c]' />
+                <div className='bg-[#f2e9ac] border-t-[#fdd70b] border-[#fdd70b]' />
+                <div className='bg-[#a7dcf5] border-t-[#36b8f5] border-[#36b8f5]' />
+            </div>
         </div>
     );
 };
-
-function colourFix() {
-    return (
-        <>
-            <div className='bg-[#a6dbcb] border-t-[#59c39c] border-[#59c39c]' />
-            <div className='bg-[#f2e9ac] border-t-[#fdd70b] border-[#fdd70b]' />
-            <div className='bg-[#a7dcf5] border-t-[#36b8f5] border-[#36b8f5]' />
-        </>
-    )
-}

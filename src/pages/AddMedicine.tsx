@@ -18,7 +18,6 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { data, addMedicineToData } from './medicineData.tsx';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import  db  from '../firebase';
 
@@ -39,21 +38,12 @@ export const AddMedicine = () => {
     const docRef = doc(db, "PharmaData", "medicine");
 
     getDoc(docRef)
-      .then((docSnap) =>{
-        if(docSnap.exists()){
-          const data: Medicine[] = docSnap.data().medicines;
-          setMedicine(data);
-        } else {
-          console.log("No such document")
-        }
-
-
-      }).catch((error) => {
-        console.log("Error getting document:", error);
-      })
-
-
-      
+        .then((docSnap) => {
+            if(docSnap.exists()){
+                const data: Medicine[] = docSnap.data().medicines;
+                setMedicine(data);
+            }
+        });
     }, []);
 
   // this state will control the fields in the form (i.e. hold their values)
@@ -163,21 +153,6 @@ export const AddMedicine = () => {
           <p className="text-lg">*All fields are mandatory, except mentioned as (optional).</p>
         </div>
 
-        {/* Display the list of medicines       
-        */}
-        
-        {/* <div className="p-12">
-          <h3 className="text-2xl mb-4">Medicine Inventory</h3>
-          <ul>
-            {data.map((medicine) => (
-              <li key={medicine.id} className="mb-2">
-                <p><strong>{medicine.name}</strong> (ID: {medicine.id}) - {medicine.quantity} units</p>
-                <p>Usage: {medicine.usage} | Side Effects: {medicine.sideEffects}</p>
-              </li>
-            ))}
-          </ul>
-        </div> */}
-
         {/* Form starts here */}
         <form className='p-12'>
           <label>
@@ -223,6 +198,7 @@ export const AddMedicine = () => {
                 name="usage"
                 value={newMedicine.usage}
                 onChange={(e) => handleChange(e)}
+                data-testid="how-to-use"
               />
             </label>
           </div>
@@ -234,6 +210,7 @@ export const AddMedicine = () => {
                 name="sideEffects"
                 value={newMedicine.sideEffects}
                 onChange={(e) => handleChange(e)}
+                data-testid='side-effects'
               />
             </label>
           </div>

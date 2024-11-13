@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import '@testing-library/jest-dom';
 import { AddMedicine } from "../pages/AddMedicine.tsx";
 import { Inventory } from "../pages/Inventory.tsx";
@@ -8,6 +8,11 @@ import { act } from "react";
 import { Dashboard } from "../pages/Dashboard.tsx";
 import { Sales } from "../pages/Sales.tsx";
 import Order from "../pages/Order.tsx";
+import App from "../App.js";
+import { DashboardComponent } from "../components/DashboardComponent.tsx";
+import { DashboardComponentTwo } from "../components/DashboardComponentTwo.tsx";
+import { useNavigate, useLocation } from "react-router-dom";
+import Sidebar from "../components/sidebar.tsx";
 
 jest.mock('firebase/firestore', () => {
     const originalModule = jest.requireActual('firebase/firestore');
@@ -20,6 +25,11 @@ jest.mock('firebase/firestore', () => {
         doc: jest.fn(),
     };
 });
+
+jest.mock('react-router-dom', () => ({
+    ...jest.requireActual('react-router-dom'),  // Keep the other exports intact
+    useNavigate: jest.fn()  // Mock useNavigate
+}));
 
 // REQUIREMENT 1 TEST - DASHBOARD DISPLAYS CORRECTLY
 test('renders Dashboard correctly, viewable to user', async () => {
@@ -372,181 +382,622 @@ test('user can make an order', async () => {
 
 
 
+// Testing for Assignment 4
+// App.js testing to make sure routing works
+describe('App Routing', () => {
+    // Set up the mock for getDoc before each test
+    beforeEach(() => {
+        getDoc.mockResolvedValue({
+            exists: () => true,
+            data: () => ({
+                data: [  
+                    { createdAt: Timestamp.fromDate(new Date()), id: 'SDG34069WRGI240', name: 'Penicillin', price: "236", quantity: "87654" },
+                    { createdAt: Timestamp.fromDate(new Date()), id: 'H3DSFKP340Y9JS', name: 'Aspirin', price: "32", quantity: "79" },
+                ],
+            }),
+        });
+    });
+
+    const renderWithRouter = (initialRoute = '/') => {
+        return render(
+            <MemoryRouter initialEntries={[initialRoute]}>
+                <App />
+            </MemoryRouter>
+        );
+    };
+
+    it('renders the Dashboard component on the root route', () => {
+        renderWithRouter('/');
+        expect(screen.getByText(/Overview of the pharmacy information/i)).toBeInTheDocument();
+    });
+
+    it('renders the Dashboard component on the /dashboard route', () => {
+        renderWithRouter('/dashboard');
+        expect(screen.getByText(/Overview of the pharmacy information/i)).toBeInTheDocument();
+    });
+
+    it('renders the Inventory component on the /inventory route', () => {
+        renderWithRouter('/inventory');
+        expect(screen.getByText(/List of medicines available for sales./i)).toBeInTheDocument();
+    });
+
+    it('renders the AddMedicine component on the /addmedicine route', () => {
+        renderWithRouter('/addmedicine');
+        expect(screen.getByText(/Add New Medicine/i)).toBeInTheDocument();
+    });
+
+    it('renders the Sales component on the /sales route', () => {
+        renderWithRouter('/sales');
+        expect(screen.getByText(/All sales of the pharmacy./i)).toBeInTheDocument();
+    });
+
+    it('renders the Order component on the /order route', () => {
+        renderWithRouter('/order');
+        expect(screen.getByText(/Make an Order/i)).toBeInTheDocument();
+    });
+});
 
 
+// Additional testing for the DashboardComponent
+describe('DashboardComponent', () => {
+    it('renders with provided props', () => {
+        const mockProps = {
+            image: '/image.jpg',
+            borderColor: 'red',
+            color: 'blue',
+            title: 'Test Title',
+            subtitle: 'Test Subtitle',
+            desc: 'Test description',
+            link: '/test-link',
+        };
 
+        render(
+            <MemoryRouter>
+                <DashboardComponent {...mockProps} />
+            </MemoryRouter>
+        );
 
+        // Check if elements are rendered correctly
+        expect(screen.getByAltText('add medicine icon')).toHaveAttribute('src', '/image.jpg');
+        expect(screen.getByText('Test Title')).toBeInTheDocument();
+        expect(screen.getByText('Test Subtitle')).toBeInTheDocument();
+        expect(screen.getByText('Test description')).toBeInTheDocument();
+    });
 
+    it('calls navigate with the correct link when clicked', () => {
+        const mockNavigate = jest.fn();  // Mock the navigate function
+        useNavigate.mockReturnValue(mockNavigate);  // Return the mock function when useNavigate is called
 
+        const mockProps = {
+            image: '/image.jpg',
+            borderColor: 'red',
+            color: 'blue',
+            title: 'Test Title',
+            subtitle: 'Test Subtitle',
+            desc: 'Test description',
+            link: '/test-link',
+        };
 
+        render(
+            <MemoryRouter>
+                <DashboardComponent {...mockProps} />
+            </MemoryRouter>
+        );
 
+        // Simulate click on the component
+        fireEvent.click(screen.getByTestId('dashboard-component-button'));  // Use data-testid if necessary
 
+        // Check that navigate function was called with correct link
+        expect(mockNavigate).toHaveBeenCalledWith('/test-link');
+    });
 
+    it('does not call navigate if no link is provided', () => {
+        const mockNavigate = jest.fn();
+        useNavigate.mockReturnValue(mockNavigate);
 
+        const mockProps = {
+            image: '/image.jpg',
+            borderColor: 'red',
+            color: 'blue',
+            title: 'Test Title',
+            subtitle: 'Test Subtitle',
+            desc: 'Test description',
+            link: null,  // No link provided
+        };
 
+        render(
+            <MemoryRouter>
+                <DashboardComponent {...mockProps} />
+            </MemoryRouter>
+        );
 
+        // Simulate click on the component
+        fireEvent.click(screen.getByTestId('dashboard-component-button'));
 
+        // Check that navigate function was not called
+        expect(mockNavigate).not.toHaveBeenCalled();
+    });
+});
 
+// Keep testing DashboardComponentTwo, to ensure that the navigate to link function works
+describe('DashboardComponentTwo', () => {
+    it('should navigate to the correct link when clicked', () => {
+        const mockNavigate = jest.fn(); // Mock function for navigation
+        useNavigate.mockReturnValue(mockNavigate); // Return the mock navigate function when useNavigate is called
+    
+        const props = {
+            no1: '123',
+            no2: '456',
+            title: 'Dashboard Title',
+            subtitle: 'Subtitle',
+            text1: 'Text 1',
+            text2: 'Text 2',
+            link: '/some-path', // The link to navigate to
+        };
+    
+        render(<DashboardComponentTwo {...props} />);
+    
+        const component = screen.getByText('Dashboard Title'); // Find an element in the component to trigger the click event
+    
+        fireEvent.click(component); // Simulate the click event
+    
+        expect(mockNavigate).toHaveBeenCalledWith('/some-path'); // Check if navigate was called with the correct link
+    });
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// test('successfully adds a medicine and it appears in inventory', async () => {
-//   // Mock the updateDoc to simulate adding a new medicine
-//   updateDoc.mockResolvedValueOnce({});
-
-//   // Mock getDoc to return the updated inventory after adding a new medicine
-//   getDoc.mockResolvedValueOnce({
-//     exists: () => true,
-//     data: () => ({
-//       medicines: [
-//         { name: 'Paracetamol 500mg', quantity: '100', id: 'D06ID232435499' },
-//       ],
-//     }),
-//   });
-
-//   // Render AddMedicine component within a MemoryRouter
-//   render(
-//     <MemoryRouter>
-//       <AddMedicine />
-//     </MemoryRouter>
-//   );
+// Testing for the sidebar, making sure that links work
+describe('Sidebar', () => {
+    let mockNavigate;
   
-//   // Simulate user input for adding a new medicine
-//   fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Paracetamol 500mg' } });
-//   fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '100' } });
-//   fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'D06ID232435499' } });
-
-//   // Submit the form
-//   fireEvent.click(screen.getByText(/Add Medicine/i));
-
-//   // Render Inventory component within a MemoryRouter
-//   render(
-//     <MemoryRouter>
-//       <Inventory />
-//     </MemoryRouter>
-//   );
+    // Set up before each test, if needed
+    beforeEach(() => {
+      mockNavigate = jest.fn(); // Local mock for useNavigate
+    });
   
-//   // Verify if the new medicine appears in the inventory
-//   const newMedicine = await screen.findByText(/Paracetamol 500mg/i);
-//   expect(newMedicine).toBeInTheDocument();
+    it('should navigate to the correct path when a sidebar item is clicked', () => {
+        // Mock useNavigate for this test
+        useNavigate.mockReturnValue(mockNavigate);
+    
+        render(
+            <MemoryRouter>
+                <Sidebar />
+            </MemoryRouter>
+        ); // Render Sidebar component
+    
+        // Test clicking on the "Dashboard" link
+        const dashboardLink = screen.getByText('Dashboard');
+        fireEvent.click(dashboardLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
+    
+        // Test clicking on other sidebar items
+        const inventoryLink = screen.getByText('Inventory');
+        fireEvent.click(inventoryLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/inventory');
+    
+        const addMedicineLink = screen.getByText('Add Medicine');
+        fireEvent.click(addMedicineLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/addmedicine');
+    
+        const salesLink = screen.getByText('View Sales');
+        fireEvent.click(salesLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/sales');
+    
+        const orderLink = screen.getByText('Make Order');
+        fireEvent.click(orderLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/order');
+    });
+});
 
-//   const medicineQuantity = await screen.findByText(/100/i);
-//   expect(medicineQuantity).toBeInTheDocument();
-// });
+// Testing for the add medicine file
+describe('AddMedicine Component', () => {
+    
+    beforeEach(() => {
+        getDoc.mockResolvedValue({
+            exists: () => true,
+            data: () => ({
+                medicines: [
+                    { name: 'Paracetamol 500mg', quantity: '100', id: 'D06ID232435499' },
+                    { name: 'Penicillin', quantity: '10', id: 'G30IHG3I040J0T' },
+                    { name: 'Aspirin', quantity: '1', id: 'NH04J50OGFKNG' },
+                ],
+                data: [ 
+                    { createdAt: Timestamp.fromDate(new Date()), id: 'SDG34069WRGI240', name: 'Penicillin', price: "236", quantity: "87654" },
+                ],
+            }),
+        });
+    });
 
-
-
-
-
-
-
-// import { render, screen, fireEvent } from '@testing-library/react';
-// import '@testing-library/jest-dom';
-// import { AddMedicine } from '../pages/AddMedicine';
-// import { Inventory } from '../pages/Inventory';
-// import { data } from '../pages/medicineData';
-
-// Helper function to reset the data array before each test
-// beforeEach(() => {
-//   data.length = 0;  // Clear the data array
-//   data.push(
-//     {
-//       name: "Augmentin 625 Duo Tablet",
-//       id: "D06ID232435454",
-//       quantity: "350",
-//       usage: "Take 1 tablet every 12 hours",
-//       sideEffects: "Nausea, Diarrhea",
-//     },
-//     {
-//       name: "Azithral 500 Tablet",
-//       id: "D06ID232435451",
-//       quantity: "150",
-//       usage: "Take 1 tablet daily",
-//       sideEffects: "Headache",
-//     },
-//     {
-//       name: "Ascoril LS Syrup",
-//       id: "D06ID232435452",
-//       quantity: "69",
-//       usage: "10 ml twice a day",
-//       sideEffects: "Drowsiness",
-//     }
-//   );
-// });
-
-// Test for successfully adding a medicine
-// test('successfully adds a medicine and it appears in inventory', async () => {
-//   // Render the AddMedicine component
-//   render(<AddMedicine />);
+    it('should load medicines and display them', async () => {
+        render(<AddMedicine />);
+    
+        // Ensure that the component renders correctly
+        expect(screen.getByText('Add New Medicine')).toBeInTheDocument();
+    
+        // Wait for Firestore data to be loaded and rendered
+        await waitFor(() => expect(getDoc).toHaveBeenCalledTimes(1));
+    });
   
-//   // Simulate user input for adding a new medicine
-//   fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Paracetamol 500mg' } });
-//   fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '100' } });
-//   fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'D06ID232435499' } });
+    it('should show an error if the medicine name is too long', async () => {
+        render(<AddMedicine />);
+    
+        // Enter too long medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(101) },
+        });
+    
+        fireEvent.click(screen.getByText('Add Medicine'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Medicine Name cannot be longer than 100 characters.')).toBeInTheDocument();
+        });
+    });
 
-//   // Submit the form
-//   fireEvent.click(screen.getByText(/Add Medicine/i));
+    it('quantity must not be empty', async () => {
+        render(<AddMedicine />);
+    
+        // Enter ok medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(15) },
+        });
+    
+        fireEvent.click(screen.getByText('Add Medicine'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Quantity cannot be empty')).toBeInTheDocument();
+        });
+    });
 
-//   // Render the Inventory component to check if the medicine appears in the inventory
-//   render(<Inventory />);
+    it('quantity must be numeric', async () => {
+        render(<AddMedicine />);
+    
+        // Enter ok medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(15) },
+        });
+        // Enter non numeric quantity
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), {
+            target: { value: 'A'.repeat(101) },
+        });
+    
+        fireEvent.click(screen.getByText('Add Medicine'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Quantity must be numeric')).toBeInTheDocument();
+        });
+    });
+
+    it('medicine ID must not be over 100 characters', async () => {
+        render(<AddMedicine />);
+    
+        // Enter ok medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(15) },
+        });
+        // Enter ok quantity
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), {
+            target: { value: 69 },
+        });
+        // Enter too long medicine id
+        fireEvent.change(screen.getByLabelText(/Medicine ID*/i), {
+            target: { value: 'A'.repeat(101) },
+        });
+    
+        fireEvent.click(screen.getByText('Add Medicine'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Medicine ID cannot be longer than 100 characters.')).toBeInTheDocument();
+        });
+    });
   
-//   // Check if the new medicine is present in the list
-//   const newMedicine = await screen.findAllByText(/Paracetamol 500mg/i);
-//   expect(newMedicine[0]).toBeInTheDocument();
+    it('should add a new medicine when the form is valid', async () => {
+        render(<AddMedicine />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Add Medicine'));
+    
+        await waitFor(() => {
+            expect(getDoc).toHaveBeenCalledTimes(1); // Check that getDoc was called to load data
+        });
+    });
 
-//   const medicineQuantity = await screen.findAllByText(/100/i);
-//   expect(medicineQuantity[0]).toBeInTheDocument();
-// });
+    it('allows for updating the how to use part', async () => {
+        render(<AddMedicine />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByTestId('how-to-use'), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Add Medicine'));
+    
+        await waitFor(() => {
+            expect(getDoc).toHaveBeenCalledTimes(1); // Check that getDoc was called to load data
+        });
+    });
 
-// // Test for failure case: Adding a medicine with missing data (e.g., missing name) and checking for error message
-// test('fails to add medicine with missing name and shows error', () => {
-//   // Render the AddMedicine component
-//   render(<AddMedicine />);
+    it('allows for updating the side effects part', async () => {
+        render(<AddMedicine />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByTestId('side-effects'), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Add Medicine'));
+    
+        await waitFor(() => {
+            expect(getDoc).toHaveBeenCalledTimes(1); // Check that getDoc was called to load data
+        });
+    });
+});
 
-//   // Simulate user input with a missing name
-//   fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
-//   fireEvent.change(screen.getByLabelText(/Medicine ID*/i), { target: { value: 'D06ID232435500' } });
 
-//   // Submit the form
-//   fireEvent.click(screen.getByText(/Add Medicine/i));
+// Testing Inventory navigation
+describe('Inventory', () => {
+    beforeEach(() => {
+        getDoc.mockResolvedValue({
+            exists: () => true,
+            data: () => ({
+                medicines: [
+                    { name: 'Paracetamol 500mg', quantity: '100', id: 'D06ID232435499' },
+                    { name: 'Penicillin', quantity: '10', id: 'G30IHG3I040J0T' },
+                    { name: 'Aspirin', quantity: '1', id: 'NH04J50OGFKNG' },
+                ],
+                data: [ 
+                    { createdAt: Timestamp.fromDate(new Date()), id: 'SDG34069WRGI240', name: 'Penicillin', price: "236", quantity: "87654" },
+                ],
+            }),
+        });
+    });
 
-//   // Check if an error message is displayed
-//   const errorMessage = screen.getByText(/Medicine Name cannot be empty/i);
-//   expect(errorMessage).toBeInTheDocument();
+    let mockNavigate;
+  
+    // Set up before each test, if needed
+    beforeEach(() => {
+      mockNavigate = jest.fn(); // Local mock for useNavigate
+    });
+  
+    it('should navigate to addmedicine to link', () => {
+        // Mock useNavigate for this test
+        useNavigate.mockReturnValue(mockNavigate);
+    
+        render(
+            <MemoryRouter>
+                <Inventory />
+            </MemoryRouter>
+        ); // Render Sidebar component
+    
+        // Test clicking on the "add medicine" link
+        const inventoryLink = screen.getByTestId('add-new-item-button');
+        fireEvent.click(inventoryLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/addmedicine');
+    });
+});
 
-//   // Check that the medicine was not added to the inventory by rendering the Inventory component
-//   render(<Inventory />);
 
-//   // Verify the medicine is not present in the list
-//   const invalidMedicine = screen.queryByText(/D06ID232435500/i);
-//   expect(invalidMedicine).not.toBeInTheDocument();
-// });
+// Testing for the order file
+describe('Order Component', () => {
+    
+    beforeEach(() => {
+        getDoc.mockResolvedValue({
+            exists: () => true,
+            data: () => ({
+                medicines: [
+                    { name: 'Paracetamol 500mg', quantity: '100', id: 'D06ID232435499' },
+                    { name: 'Penicillin', quantity: '10', id: 'G30IHG3I040J0T' },
+                    { name: 'Aspirin', quantity: '1', id: 'NH04J50OGFKNG' },
+                ],
+                data: [ 
+                    { createdAt: Timestamp.fromDate(new Date()), id: 'SDG34069WRGI240', name: 'Penicillin', price: "236", quantity: "87654" },
+                ],
+            }),
+        });
+    });
 
-// // Test for successfully removing a medicine from the inventory
-// test('successfully removes a medicine from the inventory', () => {
-//   // Render the Inventory component with initial data
-//   render(<Inventory />);
+    it('should load order and display them', async () => {
+        render(<Order />);
+    
+        // Ensure that the component renders correctly
+        expect(screen.getByText('Make an Order')).toBeInTheDocument();
+    
+        // Wait for Firestore data to be loaded and rendered
+        await waitFor(() => expect(getDoc).toHaveBeenCalledTimes(1));
+    });
+  
+    it('should show an error if the Medicine name is too long', async () => {
+        render(<Order />);
+    
+        // Enter too long medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(101) },
+        });
+    
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Medicine Name cannot be longer than 100 characters.')).toBeInTheDocument();
+        });
+    });
 
-//   // Check that the medicine to be removed is present initially
-//   const firstMedicine = screen.getByText(/Augmentin 625 Duo Tablet/i);
-//   expect(firstMedicine).toBeInTheDocument();
+    it('quantity must not be empty', async () => {
+        render(<Order />);
+    
+        // Enter ok medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(15) },
+        });
+    
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Quantity cannot be empty')).toBeInTheDocument();
+        });
+    });
 
-//   // Simulate clicking the remove button for the first medicine
-//   const removeButton = screen.getByTestId('remove-button-0');
-//   fireEvent.click(removeButton);
+    it('quantity must be numeric', async () => {
+        render(<Order />);
+    
+        // Enter ok medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(15) },
+        });
+        // Enter non numeric quantity
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), {
+            target: { value: 'A'.repeat(101) },
+        });
+    
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Quantity must be numeric')).toBeInTheDocument();
+        });
+    });
 
-//   // Check that the medicine has been removed from the inventory
-//   const removedMedicine = screen.queryByText(/Augmentin 625 Duo Tablet/i);
-//   expect(removedMedicine).not.toBeInTheDocument();
-// });
+    it('order ID must not be over 100 characters', async () => {
+        render(<Order />);
+    
+        // Enter ok medicine name
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), {
+            target: { value: 'A'.repeat(15) },
+        });
+        // Enter ok quantity
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), {
+            target: { value: 69 },
+        });
+        // Enter ok price
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), {
+            target: { value: 69 },
+        });
+        // Enter too long medicine id
+        fireEvent.change(screen.getByLabelText(/Order ID*/i), {
+            target: { value: 'A'.repeat(101) },
+        });
+    
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Order ID cannot be longer than 100 characters.')).toBeInTheDocument();
+        });
+    });
+  
+    it('should add a new order when the form is valid', async () => {
+        render(<Order />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByLabelText(/Order ID*/i), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), { target: { value: '69' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(getDoc).toHaveBeenCalledTimes(1); // Check that getDoc was called to load data
+        });
+    });
+
+    it('price per unit must not be empty', async () => {
+        render(<Order />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByLabelText(/Order ID*/i), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Price cannot be empty')).toBeInTheDocument();
+        });
+    });
+
+    it('price per unit must be numeric', async () => {
+        render(<Order />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByLabelText(/Order ID*/i), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(screen.getByText('Price must be numeric')).toBeInTheDocument();
+        });
+    });
+
+    it('allows for updating the notes part', async () => {
+        render(<Order />);
+    
+        // Fill out the form with valid data
+        fireEvent.change(screen.getByLabelText(/Medicine Name*/i), { target: { value: 'Tylenol' } });
+        fireEvent.change(screen.getByLabelText(/Quantity in Number*/i), { target: { value: '50' } });
+        fireEvent.change(screen.getByTestId('order-id'), { target: { value: 'TYL123' } });
+        fireEvent.change(screen.getByLabelText(/Price Per Unit*/i), { target: { value: '69' } });
+        fireEvent.change(screen.getByTestId('notes-part'), { target: { value: 'TYL123' } });
+    
+        // Submit the form
+        fireEvent.click(screen.getByText('Submit Order'));
+    
+        await waitFor(() => {
+            expect(getDoc).toHaveBeenCalledTimes(1); // Check that getDoc was called to load data
+        });
+    });
+});
+
+
+
+// Testing Sales navigation
+describe('Sales', () => {
+    beforeEach(() => {
+        getDoc.mockResolvedValue({
+            exists: () => true,
+            data: () => ({
+                medicines: [
+                    { name: 'Paracetamol 500mg', quantity: '100', id: 'D06ID232435499' },
+                    { name: 'Penicillin', quantity: '10', id: 'G30IHG3I040J0T' },
+                    { name: 'Aspirin', quantity: '1', id: 'NH04J50OGFKNG' },
+                ],
+                data: [ 
+                    { createdAt: Timestamp.fromDate(new Date()), id: 'SDG34069WRGI240', name: 'Penicillin', price: "236", quantity: "87654" },
+                ],
+            }),
+        });
+    });
+
+    let mockNavigate;
+  
+    // Set up before each test, if needed
+    beforeEach(() => {
+      mockNavigate = jest.fn(); // Local mock for useNavigate
+    });
+  
+    it('should navigate to addmedicine to link', () => {
+        // Mock useNavigate for this test
+        useNavigate.mockReturnValue(mockNavigate);
+    
+        render(
+            <MemoryRouter>
+                <Sales />
+            </MemoryRouter>
+        ); // Render Sidebar component
+    
+        // Test clicking on the "add medicine" link
+        const orderLink = screen.getByTestId('order-button');
+        fireEvent.click(orderLink);
+        expect(mockNavigate).toHaveBeenCalledWith('/order');
+    });
+});

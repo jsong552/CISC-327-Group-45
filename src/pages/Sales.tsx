@@ -33,11 +33,9 @@ export const Sales = () => {
                 const data: Order[] = docSnap.data().data;
                 setOrderData(data);
             }
-            else {
-                console.log("No such document");
-            }
+            
         }).catch((error) => {
-            console.log("Error getting the document: ", error);
+           
         });
     }, []);
 
@@ -77,6 +75,7 @@ export const Sales = () => {
                         <button 
                             className='bg-red-500 hover:bg-red-400 text-white rounded-xl py-3 px-6 text-xl relative top-[50px]'
                             onClick={() => navigate("/order")}
+                            data-testid="order-button"
                         >
                             Make Order
                         </button>
