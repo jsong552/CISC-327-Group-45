@@ -958,8 +958,6 @@ describe('Order Component', () => {
     });
 });
 
-
-
 // Testing Sales navigation
 describe('Sales', () => {
     beforeEach(() => {
