@@ -52,7 +52,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-        "!src/index.js"
+      "!src/index.js"
     ]
   }
 }
