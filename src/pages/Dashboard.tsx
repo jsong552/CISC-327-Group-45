@@ -35,7 +35,6 @@ export const Dashboard = () => {
                         tempQuantity += Number(medicineData[i].quantity); 
                     }
                     setQuantity(tempQuantity);
-
                 }
             }).catch(() => {});
 

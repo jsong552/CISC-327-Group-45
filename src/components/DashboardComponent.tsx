@@ -10,6 +10,16 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
         }
     };
 
+    const colourFix = () => {
+        return (
+            <div data-testid="colour-fix hidden">
+                <div className='bg-[#a6dbcb] border-t-[#59c39c] border-[#59c39c]' />
+                <div className='bg-[#f2e9ac] border-t-[#fdd70b] border-[#fdd70b]' />
+                <div className='bg-[#a7dcf5] border-t-[#36b8f5] border-[#36b8f5]' />
+            </div>
+        )
+    }
+
     const outerDivClassName = `h-64 border-2 border-[${borderColor}] flex flex-col items-center justify-between cursor-pointer`;
 
     return (
@@ -36,12 +46,6 @@ export const DashboardComponent = ({ image, borderColor, color, title, subtitle,
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div data-testid="colour-fix hidden">
-                <div className='bg-[#a6dbcb] border-t-[#59c39c] border-[#59c39c]' />
-                <div className='bg-[#f2e9ac] border-t-[#fdd70b] border-[#fdd70b]' />
-                <div className='bg-[#a7dcf5] border-t-[#36b8f5] border-[#36b8f5]' />
             </div>
         </div>
     );
