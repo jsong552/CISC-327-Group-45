@@ -1,4 +1,4 @@
-## Instructions for running End-to-End tests for Assignment 6:
+## Instructions for running End-to-End tests for CISC 237 Assignment 6:
 
 After pulling from the repo, make sure to install cypress via the following command in the terminal:
 ```npm install cypress```
