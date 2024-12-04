@@ -161,6 +161,7 @@ export const AddMedicine = () => {
               type="text"
               name="name"
               autoComplete='off'
+              data-testid="add-medicine-name"
               value={newMedicine.name}
               onChange={(e) => handleChange(e)}
               className='focus:outline-none border border-[#9ba2ab] rounded-lg bg-[#e3ebf3] p-2 text-xl w-full'
@@ -173,6 +174,7 @@ export const AddMedicine = () => {
                 type="text"
                 name="quantity"
                 autoComplete='off'
+                data-testid='add-medicine-quantity'
                 value={newMedicine.quantity}
                 onChange={(e) => handleChange(e)}
                 className='focus:outline-none border border-[#9ba2ab] rounded-lg bg-[#e3ebf3] p-2 text-xl w-full'
@@ -184,6 +186,7 @@ export const AddMedicine = () => {
                 type="text"
                 name="id"
                 autoComplete='off'
+                data-testid='add-medicine-id'
                 value={newMedicine.id}
                 onChange={(e) => handleChange(e)}
                 className='focus:outline-none border border-[#9ba2ab] rounded-lg bg-[#e3ebf3] p-2 text-xl w-full'
@@ -220,6 +223,7 @@ export const AddMedicine = () => {
         <div className='mb-32'>
           <button
             className='bg-[#f0483e] py-4 px-6 ml-12 rounded-lg hover:bg-[#ed6059]'
+            data-testid="add-medicine-button"
             onClick={handleSubmit}
           >
             <p className='text-white'>Add Medicine</p>

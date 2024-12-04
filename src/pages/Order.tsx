@@ -233,6 +233,7 @@ export default function Order() {
             {/* Add Medicine button starts here */}
             <div className='mb-32 mt-12'>
                 <button
+                    data-testid="order-button"
                     className='bg-[#f0483e] py-4 px-6 rounded-lg hover:bg-[#ed6059]'
                     onClick={handleSubmit}
                 >
