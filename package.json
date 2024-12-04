@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@testing-library/user-event": "^13.5.0",
+    "cypress": "^13.16.0",
     "date-fns": "^4.1.0",
     "firebase": "^11.0.1",
     "jest": "^27.5.1",
@@ -52,7 +53,7 @@
   },
   "jest": {
     "collectCoverageFrom": [
-        "!src/index.js"
+      "!src/index.js"
     ]
   }
 }
